@@ -5,11 +5,130 @@ import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:tjw1/core/res/colors.dart';
 import 'package:tjw1/services/api_base_service.dart';
 import 'package:toastification/toastification.dart';
 
-import '../common_widget/common_dialog.dart';
+
+// enum UploadSource { file, camera, gallery }
+//
+// class FileUploadHelper {
+//   static Future<void> pickAndUploadFile({
+//     required UploadSource source,
+//     required String fileType,
+//     required String gstNumber,
+//     required String mobileNumber,
+//     required Function(String uploadedFileName, String uploadedFileUrl) onSuccess,
+//     required RxBool isUploadLoading,
+//     required RxString uploadingKey,
+//   }) async {
+//     const allowedExtensions = ['jpg', 'pdf'];
+//     const maxFileSizeBytes = 2 * 1024 * 1024;
+//     File? file;
+//
+//     try {
+//       if (source == UploadSource.file) {
+//         final result = await FilePicker.platform.pickFiles(
+//           type: FileType.custom,
+//           allowedExtensions: allowedExtensions,
+//           allowMultiple: false,
+//         );
+//
+//         if (result == null || result.files.single.path == null) {
+//           print("No file selected.");
+//           return;
+//         }
+//         file = File(result.files.single.path!);
+//       } else {
+//
+//         final permission = source == UploadSource.camera
+//             ? Permission.camera
+//             : Permission.photos;
+//
+//         final status = await permission.request();
+//
+//         print("STATUS - ${status}");
+//
+//         if (!status.isGranted) {
+//           if (status.isPermanentlyDenied) {
+//             CommonDialog.showConfirmDialog(
+//               title: "Permission required",
+//               content: "Please enable permission from app settings to continue.",
+//               confirmText: "Open Settings",
+//               cancelTextHide: true,
+//               leading: Icon(
+//                 Icons.camera_enhance_outlined,
+//                 size: 48,
+//                 color: AppColor.primary,
+//               ),
+//               onConfirm: () {
+//                 openAppSettings();
+//               },
+//               dismissible: true
+//             );
+//           } else {
+//             Fluttertoast.showToast(msg: "Permission denied. Please allow access.");
+//           }
+//           return;
+//         }
+//
+//         final picker = ImagePicker();
+//         final pickedFile = await picker.pickImage(
+//           source: source == UploadSource.camera ? ImageSource.camera : ImageSource.gallery,
+//           imageQuality: 85,
+//         );
+//
+//         if (pickedFile == null) {
+//           print("No image selected.");
+//           return;
+//         }
+//         file = File(pickedFile.path);
+//       }
+//
+//       final fileSize = await file.length();
+//       if (fileSize > maxFileSizeBytes) {
+//         Fluttertoast.showToast(msg: "File too large. Please select a file under 2MB.");
+//         return;
+//       }
+//
+//       isUploadLoading(true);
+//       uploadingKey.value = fileType;
+//
+//       final response = await ApiBaseService().uploadImage(
+//         file,
+//         'SQ/FileUpload',
+//         fileCategory: fileType,
+//         gstNumber: gstNumber,
+//         mobileNumber: mobileNumber,
+//       );
+//
+//       if (response['status'] == "200") {
+//         final uploadedFileName = response['data']['fileName'];
+//         final uploadedUrl = response['data']['url'];
+//
+//         onSuccess(uploadedFileName, uploadedUrl);
+//
+//         toastification.show(
+//           title: Text('${response['message']}'),
+//           alignment: Alignment.center,
+//           type: ToastificationType.success,
+//           style: ToastificationStyle.fillColored,
+//           showProgressBar: false,
+//           autoCloseDuration: const Duration(seconds: 2),
+//         );
+//         // Fluttertoast.showToast(msg: response['message'] ?? "");
+//       } else {
+//         Fluttertoast.showToast(msg: "Upload failed. Try again.");
+//       }
+//     } catch (e) {
+//       print("Error during picking/uploading: $e");
+//       Fluttertoast.showToast(msg: "Something went wrong. Try again.");
+//     } finally {
+//       isUploadLoading(false);
+//       uploadingKey.value = '';
+//     }
+//   }
+// }
+
 
 
 enum UploadSource { file, camera, gallery }
@@ -29,6 +148,7 @@ class FileUploadHelper {
     File? file;
 
     try {
+      /// ---------------- FILE PICKER (PDF / DOCS) ----------------
       if (source == UploadSource.file) {
         final result = await FilePicker.platform.pickFiles(
           type: FileType.custom,
@@ -36,63 +156,59 @@ class FileUploadHelper {
           allowMultiple: false,
         );
 
-        if (result == null || result.files.single.path == null) {
-          print("No file selected.");
-          return;
-        }
+        if (result == null || result.files.single.path == null) return;
+
         file = File(result.files.single.path!);
-      } else {
+      }
 
-        final permission = source == UploadSource.camera
-            ? Permission.camera
-            : Permission.photos;
-
-        final status = await permission.request();
-
-        print("STATUS - ${status}");
+      /// ---------------- CAMERA ----------------
+      else if (source == UploadSource.camera) {
+        final status = await Permission.camera.request();
 
         if (!status.isGranted) {
           if (status.isPermanentlyDenied) {
-            CommonDialog.showConfirmDialog(
-              title: "Permission required",
-              content: "Please enable permission from app settings to continue.",
-              confirmText: "Open Settings",
-              cancelTextHide: true,
-              leading: Icon(
-                Icons.camera_enhance_outlined,
-                size: 48,
-                color: AppColor.primary,
-              ),
-              onConfirm: () {
-                openAppSettings();
-              },
-              dismissible: true
-            );
+            openAppSettings();
           } else {
-            Fluttertoast.showToast(msg: "Permission denied. Please allow access.");
+            Fluttertoast.showToast(msg: "Camera permission denied");
           }
           return;
         }
 
         final picker = ImagePicker();
         final pickedFile = await picker.pickImage(
-          source: source == UploadSource.camera ? ImageSource.camera : ImageSource.gallery,
+          source: ImageSource.camera,
           imageQuality: 85,
         );
 
-        if (pickedFile == null) {
-          print("No image selected.");
-          return;
-        }
+        if (pickedFile == null) return;
+
         file = File(pickedFile.path);
       }
 
-      final fileSize = await file.length();
+      /// ---------------- GALLERY (ANDROID + iOS SAFE) ----------------
+      else if (source == UploadSource.gallery) {
+        // ❗ DO NOT request Permission.photos on iOS
+        final picker = ImagePicker();
+        final pickedFile = await picker.pickImage(
+          source: ImageSource.gallery,
+          imageQuality: 85,
+        );
+
+        if (pickedFile == null) return;
+
+        file = File(pickedFile.path);
+      }
+
+      /// ---------------- FILE SIZE CHECK ----------------
+      final fileSize = await file!.length();
       if (fileSize > maxFileSizeBytes) {
-        Fluttertoast.showToast(msg: "File too large. Please select a file under 2MB.");
+        Fluttertoast.showToast(
+          msg: "File too large. Please select a file under 2MB.",
+        );
         return;
       }
 
+      /// ---------------- UPLOAD ----------------
       isUploadLoading(true);
       uploadingKey.value = fileType;
 
@@ -105,26 +221,24 @@ class FileUploadHelper {
       );
 
       if (response['status'] == "200") {
-        final uploadedFileName = response['data']['fileName'];
-        final uploadedUrl = response['data']['url'];
-
-        onSuccess(uploadedFileName, uploadedUrl);
+        onSuccess(
+          response['data']['fileName'],
+          response['data']['url'],
+        );
 
         toastification.show(
-          title: Text('${response['message']}'),
+          title: Text(response['message'] ?? "Uploaded"),
           alignment: Alignment.center,
           type: ToastificationType.success,
           style: ToastificationStyle.fillColored,
-          showProgressBar: false,
           autoCloseDuration: const Duration(seconds: 2),
         );
-        // Fluttertoast.showToast(msg: response['message'] ?? "");
       } else {
         Fluttertoast.showToast(msg: "Upload failed. Try again.");
       }
     } catch (e) {
-      print("Error during picking/uploading: $e");
-      Fluttertoast.showToast(msg: "Something went wrong. Try again.");
+      debugPrint("Upload error: $e");
+      Fluttertoast.showToast(msg: "Something went wrong");
     } finally {
       isUploadLoading(false);
       uploadingKey.value = '';
