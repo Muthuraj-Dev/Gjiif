@@ -12,7 +12,6 @@ import 'package:tjw1/ui/views/payment/payment_controller.dart';
 import '../../../services/secure_storage_service.dart';
 
 class SummaryController extends GetxController {
-
   late List<String> visitorIds = [];
   late String eventId = "";
 
@@ -66,7 +65,7 @@ class SummaryController extends GetxController {
     try {
       isLoading(true);
       final response = await ApiBaseService.request<PaymentSummaryResponse>(
-        'VisitorDetail/GetPaymentSummary?EventID=$eventId',  // $eventId
+        'VisitorDetail/GetPaymentSummary?EventID=$eventId', // $eventId
         method: RequestMethod.POST,
         authenticated: false,
         body: joinedVisitorIds,
@@ -78,7 +77,8 @@ class SummaryController extends GetxController {
         visitorSummaryList.assignAll(
           response.paymentSummaryData!.visitorSummary!,
         );
-        totalPayableAmount = response.paymentSummaryData!.totalPayment.toString();
+        totalPayableAmount =
+            response.paymentSummaryData!.totalPayment.toString();
       }
     } catch (e) {
       print("Error fetching visitor list: $e");
@@ -102,12 +102,12 @@ class SummaryController extends GetxController {
     try {
       /// 🔹 CALL BACKEND ONLY ONCE
       final Map<String, dynamic> decoded =
-      await ApiBaseService.request<Map<String, dynamic>>(
-        'PG/CreateOrder',
-        body: body,
-        method: RequestMethod.POST,
-        authenticated: false,
-      );
+          await ApiBaseService.request<Map<String, dynamic>>(
+            'PG/CreateOrder',
+            body: body,
+            method: RequestMethod.POST,
+            authenticated: false,
+          );
 
       final paymentData = decoded['data'];
       if (paymentData == null) {
@@ -126,10 +126,7 @@ class SummaryController extends GetxController {
       /// 🔹 USE EXISTING CONTROLLER (VERY IMPORTANT)
       final paymentController = Get.find<PaymentController>();
 
-      paymentController.startPayment(
-        orderId: orderId,
-        orderToken: orderToken,
-      );
+      paymentController.startPayment(orderId: orderId, orderToken: orderToken);
 
       return decoded;
     } catch (e) {
@@ -139,8 +136,4 @@ class SummaryController extends GetxController {
       isPaymentLoading.value = false;
     }
   }
-
-
-
-
 }

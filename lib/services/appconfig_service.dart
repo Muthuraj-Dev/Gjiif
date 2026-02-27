@@ -80,6 +80,7 @@ class AppConfig {
   String? appName;
   String? baseApiUrl;
   String? firebaseNotificationApiKey;
+  String? cashfreeEnvironment;
   Android? android;
   IOS? iOS;
   Update? update;
@@ -90,6 +91,7 @@ class AppConfig {
       {this.appName,
         this.baseApiUrl,
         this.firebaseNotificationApiKey,
+        this.cashfreeEnvironment,
         this.android,
         this.iOS,
         this.update,
@@ -100,6 +102,7 @@ class AppConfig {
     appName = json['AppName'];
     baseApiUrl = json['BaseApiUrl'];
     firebaseNotificationApiKey = json['FirebaseNotificationApiKey'];
+    cashfreeEnvironment = json['cashfree_environment'];
     android = json['Android'] != null ? new Android.fromJson(json['Android']) : null;
     iOS = json['IOS'] != null ? new IOS.fromJson(json['IOS']) : null;
     update = json['Update'] != null ? Update.fromJson(json['Update']) : null;
@@ -109,20 +112,21 @@ class AppConfig {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['AppName'] = this.appName;
-    data['BaseApiUrl'] = this.baseApiUrl;
-    data['FirebaseNotificationApiKey'] = this.firebaseNotificationApiKey;
-    if (this.android != null) {
-      data['Android'] = this.android!.toJson();
+    data['AppName'] = appName;
+    data['BaseApiUrl'] = baseApiUrl;
+    data['FirebaseNotificationApiKey'] = firebaseNotificationApiKey;
+    data['cashfree_environment'] = cashfreeEnvironment;
+    if (android != null) {
+      data['Android'] = android!.toJson();
     }
-    if (this.iOS != null) {
-      data['IOS'] = this.iOS!.toJson();
+    if (iOS != null) {
+      data['IOS'] = iOS!.toJson();
     }
-    if (this.update != null) {
-      data['Update'] = this.update!.toJson();
+    if (update != null) {
+      data['Update'] = update!.toJson();
     }
-    data['Banners'] = this.banners;
-    data['TermsAndConditions'] = this.termsAndConditions;
+    data['Banners'] = banners;
+    data['TermsAndConditions'] = termsAndConditions;
     return data;
   }
 }
@@ -142,9 +146,9 @@ class Android {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['Url'] = this.url;
-    data['Version'] = this.version;
-    data['AppID'] = this.appID;
+    data['Url'] = url;
+    data['Version'] = version;
+    data['AppID'] = appID;
     return data;
   }
 }
@@ -164,9 +168,9 @@ class IOS {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['Url'] = this.url;
-    data['Version'] = this.version;
-    data['AppId'] = this.appId;
+    data['Url'] = url;
+    data['Version'] = version;
+    data['AppId'] = appId;
     return data;
   }
 }
@@ -186,9 +190,9 @@ class Update {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['Title'] = this.title;
-    data['Subtitle'] = this.subtitle;
-    data['ForceUpdate'] = this.forceUpdate;
+    data['Title'] = title;
+    data['Subtitle'] = subtitle;
+    data['ForceUpdate'] = forceUpdate;
     return data;
   }
 }

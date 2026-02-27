@@ -9,6 +9,7 @@ import '../../../controllers/master_data_controller.dart';
 import '../../../locator.dart';
 import '../../../services/appconfig_service.dart';
 import '../../../services/network_service.dart';
+import '../payment/payment_controller.dart';
 import '../terms/terms_screen.dart';
 
 // class SplashController extends GetxController {
@@ -54,6 +55,11 @@ class SplashController extends GetxController {
       // await Future.delayed(const Duration(seconds: 1));
 
       await _loadRemoteConfig();
+
+      // 2️⃣ NOW config is available → create PaymentController
+      Get.put(MasterDataController(), permanent: true);
+      Get.put(PaymentController(), permanent: true);
+
       await _initServices();
 
       debugPrint("✅ App init success");

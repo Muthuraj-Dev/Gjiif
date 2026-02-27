@@ -84,6 +84,12 @@ class VisitorController extends GetxController {
   String? mobileNumber;
   String? visitorId;
 
+  @override
+  void onInit() {
+    super.onInit();
+    loadGstFromStorage();
+  }
+
   Future<void> loadGstFromStorage() async {
     print("------------------");
     gstNumber = await SecureStorageService().read("gst");
@@ -121,8 +127,12 @@ class VisitorController extends GetxController {
   }
 
   var visitorListData = <VisitorListData>[].obs;
+  // ✅ Flag to avoid unnecessary API calls
+  bool _hasFetchedVisitors = false;
 
-  Future<void> fetchVisitorList() async {
+  Future<void> fetchVisitorList({bool forceRefresh = false}) async {
+    print("LET SEE");
+    if (_hasFetchedVisitors && !forceRefresh) return;
     try {
       isLoading(true);
 
@@ -134,6 +144,7 @@ class VisitorController extends GetxController {
           );
       if (response.status == "200") {
         visitorListData.assignAll(response.visitorListData ?? []);
+        _hasFetchedVisitors = true; // mark as fetched
 
         if (visitorListData.isEmpty) {
           // list is empty means - it is primary member
@@ -144,6 +155,18 @@ class VisitorController extends GetxController {
     } finally {
       isLoading(false);
     }
+  }
+
+  /// Optional: call this to force reload
+  Future<void> refreshVisitorList() async {
+    _hasFetchedVisitors = false;
+    await fetchVisitorList(forceRefresh: true);
+  }
+
+  // Optional: clear cache if needed
+  void clearCache() {
+    visitorListData.clear();
+    _hasFetchedVisitors = false;
   }
 
   /////////////////////////////
@@ -322,82 +345,6 @@ class VisitorController extends GetxController {
       },
     );
   }
-
-  // Future<void> pickFile(String type) async {
-  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
-  //     type: FileType.custom,
-  //     allowedExtensions: ['jpg', 'pdf', 'doc'],
-  //     allowMultiple: false,
-  //   );
-  //
-  //   if (result != null && result.files.single.path != null) {
-  //     String fileName = result.files.single.name;
-  //     String filePath = result.files.single.path!;
-  //
-  //     File pickedFile = File(filePath);
-  //     int fileSize = await pickedFile.length();
-  //
-  //     double sizeInMB = fileSize / (1024 * 1024);
-  //     print("File size: ${sizeInMB.toStringAsFixed(2)} MB");
-  //
-  //     const int maxFileSize = 2 * 1024 * 1024;
-  //
-  //     if (fileSize > maxFileSize) {
-  //       Fluttertoast.showToast(
-  //         msg: "File Too Large, Please select a file under 2MB.",
-  //       );
-  //       return;
-  //     }
-  //
-  //     switch (type) {
-  //       case 'businessCard':
-  //         businessFileName.value = fileName;
-  //         businessFilePath = filePath;
-  //         businessError.value = '';
-  //         break;
-  //       case 'photo':
-  //         passportPhotoName.value = fileName;
-  //         passportPhotoPath = filePath;
-  //         passportPhotoError.value = '';
-  //         break;
-  //       case 'idProof':
-  //         idProofName.value = fileName;
-  //         idProofPath = filePath;
-  //         idProofError.value = '';
-  //         break;
-  //     }
-  //     try {
-  //       isLoading(true);
-  //       var response = await ApiBaseService().uploadImage(
-  //         pickedFile,
-  //         'SQ/FileUpload',
-  //         fileCategory: type,
-  //         gstNumber: '$gstNumber',
-  //         mobileNumber: '$mobileNumber',
-  //       );
-  //       if(response['status'] == "200"){
-  //         final fileName = response['data'][0]['fileName'];
-  //         print("Uploaded file name: $fileName");
-  //         if(type == "businessCard"){
-  //           businessFileName.value = fileName;
-  //         } else if (type == "photo"){
-  //           passportPhotoName.value = fileName;
-  //         } else {
-  //           idProofName.value = fileName;
-  //         }
-  //
-  //       }
-  //     } catch (e) {
-  //       print("Upload failed: $e");
-  //     } finally {
-  //       isLoading(false);
-  //     }
-  //   } else {
-  //     print("No file selected.");
-  //   }
-  // }
-
-  // Validation methods
 
   Future<void> pickFile(String type) async {
     const allowedExtensions = ['jpg', 'pdf', 'doc'];

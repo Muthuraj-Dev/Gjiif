@@ -94,7 +94,8 @@ class AddVisitorController extends GetxController {
   final getPhoneNumberDB = ''.obs;
   final currentPhoneNumber = ''.obs;
 
-  final MasterDataController masterData = Get.find();
+  // final MasterDataController masterData = Get.find();
+  late MasterDataController masterData;
   RxList<DesignationData> designationList = <DesignationData>[].obs;
 
   final ScrollController scrollController = ScrollController();
@@ -118,6 +119,8 @@ class AddVisitorController extends GetxController {
         isPhoneVerified.value = false;
       }
     });
+
+    masterData = Get.find<MasterDataController>();
 
     designationList.assignAll(masterData.designations);
 

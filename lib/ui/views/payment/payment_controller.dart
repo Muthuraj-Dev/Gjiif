@@ -9,6 +9,9 @@ import 'package:flutter_cashfree_pg_sdk/utils/cfexceptions.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../../../locator.dart';
+import '../../../services/appconfig_service.dart';
+
 class PaymentController extends GetxController {
   final CFPaymentGatewayService _pgService = CFPaymentGatewayService();
 
@@ -17,12 +20,13 @@ class PaymentController extends GetxController {
 
 
   /// Change this based on build flavor
-  static const CFEnvironment _environment = CFEnvironment.SANDBOX;
+  // static const CFEnvironment _environment = CFEnvironment.SANDBOX;
 
   @override
   void onInit() {
     super.onInit();
     _initCallbacks();
+    _loadEnvironment();
   }
 
   /// Initialize callbacks ONCE
@@ -31,6 +35,29 @@ class PaymentController extends GetxController {
       _onPaymentSuccess,
       _onPaymentFailure,
     );
+  }
+
+  late CFEnvironment _environment;
+  CFEnvironment get environment => _environment;
+
+  /// Load environment from AppConfig dynamically
+  void _loadEnvironment() {
+    final newConfig = locator<AppConfigService>().config;
+
+    print("newConfig ${newConfig.cashfreeEnvironment}");
+
+    final envString = newConfig.cashfreeEnvironment?.trim().toLowerCase();
+    print("envString $envString");
+
+    _environment = switch (envString) {
+      'production' => CFEnvironment.PRODUCTION,
+      'prod' => CFEnvironment.PRODUCTION,
+      'sandbox' => CFEnvironment.SANDBOX,
+      'dev' => CFEnvironment.SANDBOX,
+      _ => CFEnvironment.SANDBOX,
+    };
+
+    debugPrint("💰 Cashfree Environment: ${_environment}");
   }
 
   /// Start payment
@@ -47,7 +74,7 @@ class PaymentController extends GetxController {
 
     try {
       final session = CFSessionBuilder()
-          .setEnvironment(CFEnvironment.SANDBOX)
+          .setEnvironment(_environment)
           .setOrderId(orderId)
           .setPaymentSessionId(orderToken)
           .build();

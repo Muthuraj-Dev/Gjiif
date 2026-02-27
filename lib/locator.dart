@@ -24,6 +24,7 @@ void setupLocator() {
   locator.registerLazySingleton<AppConfigService>(() => AppConfigService());
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => TokenManager());
+
   // locator.registerLazySingleton(() => PageStorageService());
   // locator.registerLazySingleton(() => PushNotificationService());
   // locator.registerLazySingleton(() => RememberPreference());

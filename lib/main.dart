@@ -7,12 +7,14 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_cashfree_pg_sdk/utils/cfenums.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:tjw1/router.dart';
 import 'package:tjw1/services/appconfig_service.dart';
 import 'package:tjw1/services/network_service.dart';
+import 'package:tjw1/ui/app_binding.dart';
 import 'package:tjw1/ui/views/payment/payment_controller.dart';
 import 'package:toastification/toastification.dart';
 
@@ -279,6 +281,7 @@ import 'locator.dart';
 // }
 
 
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -312,6 +315,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       getPages: AppRoutes.pages,
+      initialBinding: AppBinding(),
       theme: AppStyle.appTheme,
     );
   }
