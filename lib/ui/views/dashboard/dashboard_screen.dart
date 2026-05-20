@@ -4,6 +4,7 @@ import '../../../core/res/colors.dart';
 import '../company/company_screen.dart';
 import '../ebadge/ebadge_screen.dart';
 import '../home/home_screen.dart';
+import '../notification/notification_screen.dart';
 import '../registered/registered_screen.dart';
 import '../setting/setting_screen.dart';
 import '../visitor/visitor_screen.dart';
@@ -38,6 +39,15 @@ class DashboardScreen extends StatelessWidget {
           child: Image.asset('assets/GJIIF_Logo.png', height: 60, width: 60),
         ),
         actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: IconButton(
+              icon: Icon(Icons.notifications_none_outlined, color: Colors.white,size: 30,),
+              onPressed: () {
+                Get.to(()=> NotificationScreen());
+              },
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: IconButton(

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:tjw1/ui/views/splash/splash_controller.dart';
 
 import '../../../helper/update_checker.dart';
+import '../../../services/onesignal_service.dart';
 
 
 
@@ -20,8 +21,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    print("INSIDE SPLASH SCREEN");
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      OneSignalService.init(context);
+    });
   }
 
   @override

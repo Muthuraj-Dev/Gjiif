@@ -275,6 +275,7 @@ class VisitorDetailController extends GetxController {
       //   Fluttertoast.showToast(msg: "${response['message']}");
       //   Get.back(result: 'refresh');
       // }
+
     } catch (e) {
       print('Error: $e');
       Get.snackbar("Error", "Something went wrong");

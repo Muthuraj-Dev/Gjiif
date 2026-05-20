@@ -238,22 +238,6 @@ class ApiBaseService {
     return null;
   }
 
-  // Future<dynamic> uploadImage(File file, String endpoint) async {
-  //   var request = http.MultipartRequest('POST', Uri.parse(baseUrl + endpoint))
-  //     ..files.add(await http.MultipartFile.fromPath('file', file.path));
-  //
-  //   var response = await _sendAsync(
-  //     'POST',
-  //     endpoint,
-  //     request,
-  //     authenticated: true,
-  //   );
-  //   if (response != null) {
-  //     return jsonDecode(response.body)['file'];
-  //   }
-  //   throw Exception("Image upload failed");
-  // }
-
   Future<dynamic> uploadImage(
       File file,
       String endpoint, {

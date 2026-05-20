@@ -8,7 +8,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:tjw1/services/api_base_service.dart';
 import 'package:toastification/toastification.dart';
 
-
 // enum UploadSource { file, camera, gallery }
 //
 // class FileUploadHelper {
@@ -129,8 +128,6 @@ import 'package:toastification/toastification.dart';
 //   }
 // }
 
-
-
 enum UploadSource { file, camera, gallery }
 
 class FileUploadHelper {
@@ -139,7 +136,8 @@ class FileUploadHelper {
     required String fileType,
     required String gstNumber,
     required String mobileNumber,
-    required Function(String uploadedFileName, String uploadedFileUrl) onSuccess,
+    required Function(String uploadedFileName, String uploadedFileUrl)
+    onSuccess,
     required RxBool isUploadLoading,
     required RxString uploadingKey,
   }) async {
@@ -160,31 +158,85 @@ class FileUploadHelper {
 
         file = File(result.files.single.path!);
       }
-
       /// ---------------- CAMERA ----------------
+      // else if (source == UploadSource.camera) {
+      //   final status = await Permission.camera.request();
+      //
+      //   if (!status.isGranted) {
+      //     if (status.isPermanentlyDenied) {
+      //       openAppSettings();
+      //     } else {
+      //       Fluttertoast.showToast(msg: "Camera permission denied");
+      //     }
+      //     return;
+      //   }
+      //
+      //   final picker = ImagePicker();
+      //   final pickedFile = await picker.pickImage(
+      //     source: ImageSource.camera,
+      //     imageQuality: 85,
+      //   );
+      //
+      //   if (pickedFile == null) return;
+      //
+      //   file = File(pickedFile.path);
+      // }
+      // else if (source == UploadSource.camera) {
+      //   // Check current status first
+      //   final status = await Permission.camera.status;
+      //
+      //   print("CAMERA STATUS - $status");
+      //
+      //   if (status.isPermanentlyDenied) {
+      //     Fluttertoast.showToast(
+      //       msg: "Camera permission is disabled. Enable it from Settings.",
+      //     );
+      //     return;
+      //   }
+      //
+      //   final result = await Permission.camera.request();
+      //
+      //   print("CAMERA STATUS 2 - $status");
+      //
+      //   if (!result.isGranted) {
+      //     Fluttertoast.showToast(msg: "Camera permission denied");
+      //     return;
+      //   }
+      //
+      //   final picker = ImagePicker();
+      //   final pickedFile = await picker.pickImage(
+      //     source: ImageSource.camera,
+      //     imageQuality: 85,
+      //   );
+      //
+      //   if (pickedFile == null) return;
+      //   file = File(pickedFile.path);
+      // }
       else if (source == UploadSource.camera) {
         final status = await Permission.camera.request();
 
-        if (!status.isGranted) {
-          if (status.isPermanentlyDenied) {
-            openAppSettings();
-          } else {
-            Fluttertoast.showToast(msg: "Camera permission denied");
-          }
-          return;
+        print("CAMERA STATUS (request result) - $status");
+
+        if (status.isGranted) {
+          final picker = ImagePicker();
+          final pickedFile = await picker.pickImage(
+            source: ImageSource.camera,
+            imageQuality: 85,
+          );
+
+          if (pickedFile == null) return;
+          file = File(pickedFile.path);
+
+        } else if (status.isPermanentlyDenied) {
+          Fluttertoast.showToast(
+            msg: "Camera permission is disabled. Enable it from Settings.",
+          );
+          // Optional but correct UX:
+          // openAppSettings();
+        } else {
+          Fluttertoast.showToast(msg: "Camera permission denied");
         }
-
-        final picker = ImagePicker();
-        final pickedFile = await picker.pickImage(
-          source: ImageSource.camera,
-          imageQuality: 85,
-        );
-
-        if (pickedFile == null) return;
-
-        file = File(pickedFile.path);
       }
-
       /// ---------------- GALLERY (ANDROID + iOS SAFE) ----------------
       else if (source == UploadSource.gallery) {
         // ❗ DO NOT request Permission.photos on iOS
@@ -221,10 +273,7 @@ class FileUploadHelper {
       );
 
       if (response['status'] == "200") {
-        onSuccess(
-          response['data']['fileName'],
-          response['data']['url'],
-        );
+        onSuccess(response['data']['fileName'], response['data']['url']);
 
         toastification.show(
           title: Text(response['message'] ?? "Uploaded"),
