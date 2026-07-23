@@ -7,7 +7,6 @@ import 'package:tjw1/ui/views/add_visitor/add_visitor_screen.dart';
 import 'package:tjw1/ui/views/select_visitor/select_visitor_screen.dart';
 import '../../../common_widget/common_button.dart';
 import '../../../core/res/colors.dart';
-import '../visitor_detail/visitor_detail_screen.dart';
 import 'event_detail_controller.dart';
 
 class EventDetailScreen extends StatefulWidget {
@@ -186,7 +185,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                               ),
                             ),
                           );
-                        }).toList(),
+                        }),
 
                         SizedBox(height: 16),
 
@@ -229,28 +228,34 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
               bottom: 10,
             ),
             color: AppColor.background,
-            child: Obx((){
-              return  !controller.isLoading.value ? CommonButton(
-                text: "Register Now",
-                isLoading: controller.isVisitorListLoading.value,
-                onPressed: () async {
-                  final isEmpty = await controller.fetchRegisteredVisitorList();
-                  if (isEmpty) {
-                    Get.to(
+            child: Obx(() {
+              return !controller.isLoading.value
+                  ? CommonButton(
+                    text: "Register Now",
+                    isLoading: controller.isVisitorListLoading.value,
+                    onPressed: () async {
+                      final isEmpty =
+                          await controller.fetchRegisteredVisitorList();
+                      if (isEmpty) {
+                        Get.to(
                           () => AddVisitorScreen(),
-                      arguments: {'isFromEdit': false, 'visitorID': 0},
-                    );
-                  } else {
-                    Get.to(() => SelectVisitorScreen(), arguments: {
-                      'visitorList': controller.registeredVisitorList.toList(),
-                      'eventId' : controller.eventId,
-                      'statusList': controller.statusList.toList(),
-                    });
-                  }
-                },
-              ) : SizedBox.shrink();
-            })
-
+                          arguments: {'isFromEdit': false, 'visitorID': 0},
+                        );
+                      } else {
+                        Get.to(
+                          () => SelectVisitorScreen(),
+                          arguments: {
+                            'visitorList':
+                                controller.registeredVisitorList.toList(),
+                            'eventId': controller.eventId,
+                            'statusList': controller.statusList.toList(),
+                          },
+                        );
+                      }
+                    },
+                  )
+                  : SizedBox.shrink();
+            }),
           ),
         ),
       ),

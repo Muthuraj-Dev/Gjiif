@@ -5,7 +5,6 @@ import 'package:tjw1/core/model/tjw/single_otp_verify_response.dart';
 import 'package:tjw1/services/api_base_service.dart';
 import 'package:tjw1/services/request_method.dart';
 
-import '../../../core/model/tjw/otp_verify.dart';
 import '../ebadge_member/ebadge_member_screen.dart';
 
 class OtpMemberController extends GetxController {
@@ -64,7 +63,7 @@ class OtpMemberController extends GetxController {
         Fluttertoast.showToast(
           msg: response.message ?? "Verified successfully",
         );
-        Get.to(() => EbadgeMemberScreen(),arguments: response.data);
+        Get.to(() => EbadgeMemberScreen(), arguments: response.data);
       } else {
         Fluttertoast.showToast(msg: response.message ?? "Status 100");
       }
@@ -81,12 +80,12 @@ class OtpMemberController extends GetxController {
     try {
       isLoading(true);
 
-      Map<String, dynamic>
-      response = await ApiBaseService.request<Map<String, dynamic>>(
-        'Single/ReSendOTP?mobileNumber=$mobileNumber&visitorID=$visitorID',
-        method: RequestMethod.GET,
-        authenticated: false,
-      );
+      Map<String, dynamic> response =
+          await ApiBaseService.request<Map<String, dynamic>>(
+            'Single/ReSendOTP?mobileNumber=$mobileNumber&visitorID=$visitorID',
+            method: RequestMethod.GET,
+            authenticated: false,
+          );
       otpID = response['otpID'].toString();
       visitorID = response['visitorID'].toString();
       mobileNumber = response['mobileNumber'].toString();

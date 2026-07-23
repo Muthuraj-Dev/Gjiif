@@ -2,10 +2,9 @@ import 'package:get/get.dart';
 import 'package:tjw1/core/model/tjw/select_primary_number.dart';
 import 'package:tjw1/services/api_base_service.dart';
 import 'package:tjw1/services/request_method.dart';
-import 'package:tjw1/services/secure_storage_service.dart';
 import 'package:tjw1/ui/views/otp/otp_screen.dart';
 
-class SelectPrimaryController extends GetxController{
+class SelectPrimaryController extends GetxController {
   var isLoading = false.obs;
 
   String? gstNumber;
@@ -18,33 +17,37 @@ class SelectPrimaryController extends GetxController{
 
   List<String> extractMobileNumbers(String input) {
     final parts = input.split(RegExp(r'[;,]'));
-    final mobileNumbers = parts
-        .map((e) => e.trim())
-        .where((e) => e.isNotEmpty && e.length == 10 && RegExp(r'^\d{10}$').hasMatch(e))
-        .toList();
+    final mobileNumbers =
+        parts
+            .map((e) => e.trim())
+            .where(
+              (e) =>
+                  e.isNotEmpty &&
+                  e.length == 10 &&
+                  RegExp(r'^\d{10}$').hasMatch(e),
+            )
+            .toList();
 
     return mobileNumbers;
   }
 
   Future<void> setPrimaryNumber(VisitorPhone data) async {
-
     String raw = data.visitorPhone;
     List<String> numbers = extractMobileNumbers(raw);
 
-    print("== NNNN ${numbers}"); // Output: [9892375841]
+    print("== NNNN $numbers"); // Output: [9892375841]
 
     try {
       isLoading(true);
 
-      final Map<String, dynamic> json = await ApiBaseService.request<Map<String, dynamic>>(
+      final Map<String, dynamic>
+      json = await ApiBaseService.request<Map<String, dynamic>>(
         'OTP/ReSendOTP?mobileNumber=${numbers.first}&visitorID=${data.visitorID}',
         method: RequestMethod.GET,
         authenticated: false,
       );
 
-
-      if(json.isNotEmpty){
-
+      if (json.isNotEmpty) {
         final otpData = {
           "otpID": json['otpID'],
           "mobileNumber": json['mobileNumber'],
@@ -52,9 +55,9 @@ class SelectPrimaryController extends GetxController{
           "sentOTP": json['sentOTP'],
         };
 
-        print("======= ${otpData}");
+        print("======= $otpData");
 
-        Get.to(() => OtpScreen(isNewPrimaryNumber: true,), arguments: otpData);
+        Get.to(() => OtpScreen(isNewPrimaryNumber: true), arguments: otpData);
       }
     } catch (e) {
       print('Error: $e');
@@ -62,11 +65,6 @@ class SelectPrimaryController extends GetxController{
     } finally {
       isLoading(false);
     }
-
-
-
-
-
 
     // isLoading.value = true;
     //
@@ -83,5 +81,4 @@ class SelectPrimaryController extends GetxController{
     //   Get.to(() => OtpScreen(), arguments: dummyOtpData);
     // });
   }
-
 }

@@ -1,16 +1,11 @@
 import 'dart:async';
-import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pinput/pinput.dart';
 import 'package:tjw1/controllers/master_data_controller.dart';
-import 'package:tjw1/helper/file_upload_helper.dart';
 import 'package:tjw1/helper/utils/upload_utils.dart';
 
 import '../../../common_widget/common_button.dart';
@@ -127,7 +122,6 @@ class AddVisitorController extends GetxController {
     ever(masterData.designations, (_) {
       designationList.assignAll(masterData.designations);
     });
-
   }
 
   void _scrollListener() {
@@ -143,7 +137,6 @@ class AddVisitorController extends GetxController {
       showSaveButton.value = shouldShow;
     }
   }
-
 
   Future<void> _loadGstFromStorage() async {
     gstNumber = await SecureStorageService().read("gst");
@@ -172,7 +165,6 @@ class AddVisitorController extends GetxController {
 
       return;
     }
-
 
     try {
       isLoading(true);
@@ -222,7 +214,6 @@ class AddVisitorController extends GetxController {
 
     // Get.to(() => SelectVisitorScreen());
   }
-
 
   Future<bool> requestStoragePermission() async {
     var status = await Permission.storage.status;
@@ -530,7 +521,7 @@ class AddVisitorController extends GetxController {
     try {
       isOTPVerifyLoading(true);
       final OtpVerify response = await ApiBaseService.request<OtpVerify>(
-        'OTP/OTPVerify?otpID=${optID.value}&mobileNumber=${phoneNumberController.text}&visitorID=${visitorId}&enteredOTP=$enteredOTP',
+        'OTP/OTPVerify?otpID=${optID.value}&mobileNumber=${phoneNumberController.text}&visitorID=$visitorId&enteredOTP=$enteredOTP',
         method: RequestMethod.GET,
         authenticated: false,
       );
@@ -544,10 +535,8 @@ class AddVisitorController extends GetxController {
 
         getPhoneNumberDB.value = phoneNumberController.text;
         Get.back();
-      } else if (response.status == "100"){
-        Fluttertoast.showToast(
-          msg: response.message ?? "",
-        );
+      } else if (response.status == "100") {
+        Fluttertoast.showToast(msg: response.message ?? "");
       }
     } catch (e) {
       print('Error: $e');
@@ -608,8 +597,4 @@ class AddVisitorController extends GetxController {
         return null;
     }
   }
-
 }
-
-
-

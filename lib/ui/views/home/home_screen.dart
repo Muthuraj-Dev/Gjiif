@@ -5,11 +5,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:tjw1/common_widget/common_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common_widget/tap_outside_unfocus.dart';
-import '../../../core/enum/view_state.dart';
 import '../../../core/res/colors.dart';
 import '../event_detail/event_detail_screen.dart';
+import '../select_visitor/select_visitor_screen.dart';
 import 'home_controller.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -96,12 +98,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(height: 10),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Text(
-                        "Select Your Event ",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                        ),
+                      child: Row(
+                        children: [
+                          Image.asset("assets/app_logo.png", width: 36),
+                          SizedBox(width: 6),
+                          Text(
+                            "Upcoming Events",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     Obx(
@@ -123,8 +131,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: AppColor.border.withOpacity(0.4),
+                                      color: AppColor.white,
                                       borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: AppColor.primary,
+                                      ),
                                       boxShadow: [
                                         BoxShadow(
                                           color: Colors.black.withOpacity(0.1),
@@ -139,69 +150,184 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ],
                                     ),
                                     child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                      padding: const EdgeInsets.all(15),
+                                      child: Column(
                                         children: [
-                                          Container(
-                                            width: 150,
-                                            height: 100,
-                                            padding: const EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              color: AppColor.primary,
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            child: Image.network(
-                                              event.eventLogo!,
-                                              fit: BoxFit.contain,
-                                              errorBuilder:
-                                                  (
-                                                    context,
-                                                    error,
-                                                    stackTrace,
-                                                  ) => Icon(Icons.broken_image),
-                                            ),
-                                          ),
-                                          const SizedBox(width: 10),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  event.eventName ?? '',
-                                                  style: const TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w500,
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Column(
+                                                children: [
+                                                  Text(
+                                                    controller.getMonth(
+                                                      event.eventStartOn,
+                                                    ),
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: AppColor.primary,
+                                                    ),
                                                   ),
-                                                ),
-                                                const SizedBox(height: 6),
-                                                Row(
-                                                  children: [
-                                                    const Icon(
-                                                      Icons.date_range,
-                                                      size: 20,
+                                                  Text(
+                                                    controller.getDay(
+                                                      event.eventStartOn,
                                                     ),
-                                                    const SizedBox(width: 4),
-                                                    Text(event.date ?? ''),
+                                                    style: const TextStyle(
+                                                      fontSize: 24,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    controller.getYear(
+                                                      event.eventStartOn,
+                                                    ),
+                                                    style: const TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Color(0xff5C5C5C),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(width: 10),
+                                              const SizedBox(
+                                                height: 80,
+                                                child: VerticalDivider(),
+                                              ),
+                                              const SizedBox(width: 10),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                        color: AppColor.primary
+                                                            .withOpacity(0.3),
+                                                        borderRadius: BorderRadius.circular(20)
+                                                      ),
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.symmetric(vertical: 2,horizontal: 6),
+                                                        child: Text(
+                                                          event.editionNumber ??
+                                                              '',
+                                                          style: const TextStyle(
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+
+                                                    Text(
+                                                      event.eventName ?? '',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      event.editionTag ?? '',
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: Color(0xff5C5C5C),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 4),
+                                                    Row(
+                                                      children: [
+                                                        const Icon(
+                                                          Icons
+                                                              .location_on_outlined,
+                                                          size: 20,
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 4,
+                                                        ),
+                                                        Expanded(
+                                                          child: Text(
+                                                            "${event.venue!}, ${event.city}",
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ],
                                                 ),
-                                                const SizedBox(height: 4),
-                                                Row(
-                                                  children: [
-                                                    const Icon(
-                                                      Icons
-                                                          .location_on_outlined,
-                                                      size: 20,
-                                                    ),
-                                                    const SizedBox(width: 4),
-                                                    Text(event.venue ?? ''),
-                                                  ],
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 12),
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: CommonButton.outline(
+                                                  prefixIcon: Icon(
+                                                    Icons.messenger_outline,
+                                                    color: AppColor.primary,
+                                                  ),
+                                                  text: "Stall Enquiry",
+                                                  onPressed: () async {
+                                                    final Uri url = Uri.parse(
+                                                      "${event.stallUrl}",
+                                                    );
+
+                                                    if (await canLaunchUrl(
+                                                      url,
+                                                    )) {
+                                                      await launchUrl(
+                                                        url,
+                                                        mode:
+                                                            LaunchMode
+                                                                .externalApplication, // Opens in browser
+                                                      );
+                                                    } else {
+                                                      debugPrint(
+                                                        'Could not launch $url',
+                                                      );
+                                                    }
+                                                  },
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+
+                                              SizedBox(width: 12),
+                                              Expanded(
+                                                child: CommonButton(
+                                                  suffixIcon: Icon(
+                                                    Icons.arrow_forward,
+                                                    color: AppColor.white,
+                                                  ),
+                                                  text: "Pre Register",
+                                                  onPressed: () {
+                                                    Get.to(
+                                                      () => EventDetailScreen(),
+                                                      arguments: event.eventID,
+                                                    ); // if needed
+                                                  },
+                                                ),
+
+                                                // CommonButton.outline(
+                                                //   textColor: Colors.black,
+                                                //   outlineColor: Colors.black,
+                                                //   text: "Details",
+                                                //   onPressed: () {
+                                                //     Get.to(
+                                                //           () => EventDetailScreen(),
+                                                //       arguments: event.eventID,
+                                                //     ); // if needed
+                                                //   },
+                                                // ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
@@ -465,7 +591,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ],
                                   ),
                                 );
-                              }).toList(),
+                              }),
                             ],
                           ),
                         ),

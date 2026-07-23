@@ -1,29 +1,12 @@
-
-import 'dart:convert';
-
-import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_cashfree_pg_sdk/utils/cfenums.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:tjw1/router.dart';
-import 'package:tjw1/services/appconfig_service.dart';
-import 'package:tjw1/services/network_service.dart';
 import 'package:tjw1/ui/app_binding.dart';
-import 'package:tjw1/ui/views/payment/payment_controller.dart';
 import 'package:toastification/toastification.dart';
 
-
-
-
-
-import 'controllers/master_data_controller.dart';
-import 'core/res/colors.dart';
 import 'core/res/styles.dart';
 import 'firebase_options.dart';
 import 'locator.dart';
@@ -204,7 +187,6 @@ import 'locator.dart';
 //   }
 // }
 
-
 // ================ WORKING - WHITE SCREEN ISSUE ================
 //
 // Future<void> main() async {
@@ -280,22 +262,14 @@ import 'locator.dart';
 //   await masterData.loadInitialData();
 // }
 
-
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   setupLocator();
 
-  runApp(
-    const ToastificationWrapper(
-      child: MyApp(),
-    ),
-  );
+  runApp(const ToastificationWrapper(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -320,4 +294,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

@@ -1,21 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 import 'package:pinput/pinput.dart';
-
-
 
 import 'package:tjw1/common_widget/common_button.dart';
 import 'package:tjw1/common_widget/tap_outside_unfocus.dart';
 
 import '../../../core/res/colors.dart';
 import 'otp_controller.dart';
-
-
 
 class OtpScreen extends StatefulWidget {
   bool? isNewPrimaryNumber;
@@ -153,7 +146,6 @@ class _OtpScreenState extends State<OtpScreen> {
                           keyboardType: TextInputType.number,
                           onChanged: (value) {},
                         ),
-
                       ],
                     ),
                   ),
@@ -193,6 +185,5 @@ class _OtpScreenState extends State<OtpScreen> {
         }),
       ),
     );
-
   }
 }

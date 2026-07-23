@@ -3,15 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tjw1/core/model/tjw/registered_visitor_list.dart';
 import 'package:tjw1/ui/views/add_visitor/add_visitor_screen.dart';
-import 'package:tjw1/ui/views/edit_visitor/edit_visitor_screen.dart';
 import 'package:tjw1/ui/views/select_visitor/select_visitor_controller.dart';
 import 'package:tjw1/ui/views/summary/summary_screen.dart';
 
 import '../../../common_widget/common_button.dart';
-import '../../../common_widget/common_dialog.dart';
 import '../../../core/res/colors.dart';
 import '../add_visitor/add_visitor_binding.dart';
-import '../visitor_detail/visitor_detail_screen.dart';
 
 class SelectVisitorScreen extends StatefulWidget {
   const SelectVisitorScreen({super.key});
@@ -242,122 +239,6 @@ class _VisitorListItemState extends State<VisitorListItem>
   Widget build(BuildContext context) {
     super.build(context); // required for KeepAlive
 
-    // return Container(
-    //   decoration: BoxDecoration(
-    //     color: AppColor.tertiary,
-    //     borderRadius: BorderRadius.circular(6),
-    //   ),
-    //   child: Padding(
-    //     padding: const EdgeInsets.all(8.0),
-    //     child: Row(
-    //       children: [
-    //         ClipRRect(
-    //           borderRadius: BorderRadius.circular(12),
-    //           child: CachedNetworkImage(
-    //             height: 100,
-    //             width: 100,
-    //             imageUrl: "${widget.data.visitorPhoto!}?ts=${DateTime.now().millisecondsSinceEpoch}", //
-    //             fit: BoxFit.cover,
-    //             //   cacheKey: widget.data.visitorID.toString() + (widget.data.visitorPhoto ?? ""),
-    //             placeholder: (context, url) => Container(
-    //               height: 100,
-    //               width: 100,
-    //               color: Colors.grey[200],
-    //               child: const Center(
-    //                 child: SizedBox(
-    //                   height: 18,
-    //                   width: 18,
-    //                   child: CircularProgressIndicator(
-    //                     strokeWidth: 2,
-    //                     color: Colors.grey,
-    //                   ),
-    //                 ),
-    //               ),
-    //             ),
-    //
-    //             errorWidget: (context, url, error) => Image.asset(
-    //               'assets/updateBanner.png',
-    //               fit: BoxFit.cover,
-    //             ),
-    //           ),
-    //         ),
-    //         const SizedBox(width: 10),
-    //
-    //         Expanded(
-    //           child: Column(
-    //             crossAxisAlignment: CrossAxisAlignment.start,
-    //             children: [
-    //               Text(
-    //                 widget.data.visitorName!,
-    //                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-    //               ),
-    //               Text(
-    //                 widget.data.visitorMobile!,
-    //                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-    //               ),
-    //
-    //               Padding(
-    //                 padding: const EdgeInsets.only(top: 10),
-    //                 child: Row(
-    //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //                   children: [
-    //                     InkWell(
-    //                       onTap: () async {
-    //                         final result = await Get.to(
-    //                               () => EditVisitorScreen(),
-    //                           arguments: {
-    //                             'isFromEdit': true,
-    //                             'visitorID': widget.data.visitorID,
-    //                           },
-    //                         );
-    //                         if (result == 'refresh') {
-    //                           widget.controller.fetchVisitorList();
-    //                         }
-    //
-    //                       },
-    //                       child: Text(
-    //                         "Edit",
-    //                         style: TextStyle(
-    //                           fontSize: 17,
-    //                           color: AppColor.black,
-    //                           decoration: TextDecoration.underline,
-    //                         ),
-    //                       ),
-    //                     ),
-    //                     InkWell(
-    //                       onTap: () {
-    //                         CommonDialog.showConfirmDialog(
-    //                           title: "Confirm Remove",
-    //                           content: "Are you sure you want to remove ?",
-    //                           confirmText: "Yes",
-    //                           cancelText: "No",
-    //                           onConfirm: () {
-    //                             print("Item removed");
-    //                             Get.back();
-    //                           },
-    //                           leading: Icon(
-    //                             Icons.warning_amber_rounded,
-    //                             size: 48,
-    //                             color: AppColor.primary,
-    //                           ),
-    //                           onCancel: () {
-    //                             Get.back(); // Just close the dialog
-    //                           },
-    //                         );
-    //                       },
-    //                       child: Icon(Icons.delete_forever_sharp),
-    //                     ),
-    //                   ],
-    //                 ),
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    // );
-
     return Container(
       decoration: BoxDecoration(
         color: widget.index % 2 == 0 ? Color(0xffFCF4CB) : Color(0xffF0F0F0),
@@ -377,7 +258,7 @@ class _VisitorListItemState extends State<VisitorListItem>
                     //     widget.visitor.visitorPhotoURL ??
                     //     "https://via.placeholder.com/100",
                     imageUrl:
-                    "${widget.visitor.visitorPhotoURL!}?ts=${DateTime.now().millisecondsSinceEpoch}",
+                        "${widget.visitor.visitorPhotoURL!}?ts=${DateTime.now().millisecondsSinceEpoch}",
                     // fallback image
                     fit: BoxFit.cover,
                     // placeholder:
@@ -403,6 +284,7 @@ class _VisitorListItemState extends State<VisitorListItem>
                           ),
                         ),
                   ),
+                  if (widget.visitor.statusID != 1)
                   Positioned(
                     top: -10,
                     left: -10,
@@ -467,7 +349,9 @@ class _VisitorListItemState extends State<VisitorListItem>
                                   visitorID: widget.visitor.visitorID!,
                                   index: widget.index,
                                   context: context,
+                                  visitorName: widget.visitor.visitorName!,
                                 );
+
                               }
                             },
                           ),

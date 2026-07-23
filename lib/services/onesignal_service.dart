@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -38,6 +37,7 @@ class OneSignalService {
       }
     });
   }
+
   /// ✅ SIMPLE HELPER FOR UI
   static bool get isNotificationEnabled {
     return OneSignal.User.pushSubscription.optedIn == true;
@@ -48,10 +48,9 @@ class OneSignalService {
     return OneSignal.User.pushSubscription.id;
   }
 
-
-
   static Future<void> requestNotificationPermission(
-      BuildContext context) async {
+    BuildContext context,
+  ) async {
     // Android 13+ requires runtime permission
     final status = await Permission.notification.status;
 
@@ -76,9 +75,7 @@ class OneSignalService {
     if (result.isPermanentlyDenied) {
       _showSettingsDialog(context);
     } else {
-      Fluttertoast.showToast(
-        msg: "Please allow notifications to stay updated",
-      );
+      Fluttertoast.showToast(msg: "Please allow notifications to stay updated");
     }
   }
 
@@ -86,7 +83,7 @@ class OneSignalService {
     CommonDialog.showConfirmDialog(
       title: "Enable Notifications",
       content:
-      "Notifications are disabled. Please enable them from app settings to receive updates.",
+          "Notifications are disabled. Please enable them from app settings to receive updates.",
       confirmText: "Open Settings",
       cancelTextHide: true,
       leading: Icon(
@@ -100,8 +97,6 @@ class OneSignalService {
       dismissible: true,
     );
   }
-
-
 }
 
 

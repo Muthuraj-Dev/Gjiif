@@ -54,7 +54,6 @@ class SelectVisitorController extends GetxController {
 
   int dropdownStatusId = -1;
 
-
   @override
   void onInit() {
     super.onInit();
@@ -76,22 +75,12 @@ class SelectVisitorController extends GetxController {
       this.eventId.value = eventId;
     }
 
-    final StatusList allOption = StatusList(
-      statusID: -1,
-      status: 'All',
-    );
+    final StatusList allOption = StatusList(statusID: -1, status: 'All');
 
     if (statusDropdownList != null) {
       print("Received status list: $statusDropdownList");
-      statusList.assignAll([
-        allOption,
-        ...statusDropdownList,
-      ]);
+      statusList.assignAll([allOption, ...statusDropdownList]);
     }
-
-
-
-
   }
 
   Future<void> _loadGstFromStorage() async {
@@ -121,7 +110,6 @@ class SelectVisitorController extends GetxController {
 
     return true; // fallback to incomplete if unknown
   }
-
 
   RxBool isVisitorListLoading = false.obs;
 
@@ -170,14 +158,14 @@ class SelectVisitorController extends GetxController {
         //
         // print("LETS SEE STATUS LIST = ${statusList.toJson()}");
 
-
         final newVisitorList = response.registeredData?.visitorsList ?? [];
         visitorList.assignAll(newVisitorList);
 
         // Rebuild selected list based on whether the visitor ID is in selectedVisitorIDs
-        selected.value = newVisitorList.map((visitor) {
-          return selectedVisitorIDs.contains(visitor.visitorID.toString());
-        }).toList();
+        selected.value =
+            newVisitorList.map((visitor) {
+              return selectedVisitorIDs.contains(visitor.visitorID.toString());
+            }).toList();
 
         print("LETS SEE STATUS LIST = ${statusList.toJson()}");
       }
@@ -191,11 +179,12 @@ class SelectVisitorController extends GetxController {
   void handleIncompleteVisitor({
     required int visitorID,
     required int index,
-    required BuildContext context,
+    required BuildContext context, required String visitorName,
   }) {
     CommonDialog.showConfirmDialog(
       title: "Incomplete Registration",
-      content: "This visitor’s registration details are incomplete. Do you want to complete it?",
+      content:
+          "$visitorName details are incomplete. Press 'Edit Now' to complete mandatory details to continue registration for this employee",
       confirmText: "Edit Now",
       cancelText: "Cancel",
       leading: const Icon(
@@ -205,23 +194,22 @@ class SelectVisitorController extends GetxController {
       ),
       onConfirm: () {
         Get.to(
-              () => EditVisitorScreen(),
+          () => EditVisitorScreen(),
           arguments: {'visitorID': visitorID, 'isFromEdit': true},
         )?.then((_) {
           selected[index] = false;
           selectedVisitorIDs.remove(visitorID.toString());
-          print("EDIT BACK = VISITOR IDs: ${selectedVisitorIDs}",);
+          print("EDIT BACK = VISITOR IDs: $selectedVisitorIDs");
           fetchRegisteredVisitorList();
         });
       },
       onCancel: () {
         selected[index] = false;
         selectedVisitorIDs.remove(visitorID.toString());
-        print("CANCEL = VISITOR IDs: ${selectedVisitorIDs}",);
+        print("CANCEL = VISITOR IDs: $selectedVisitorIDs");
       },
     );
   }
-
 
   Color getStatusColorByID(int statusID) {
     switch (statusID) {

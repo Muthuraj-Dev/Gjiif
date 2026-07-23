@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:tjw1/common_widget/common_button.dart';
 import 'package:tjw1/core/model/tjw/payment_summary_response.dart';
 import 'package:tjw1/core/res/colors.dart';
-import 'package:tjw1/ui/views/payment/payment_controller.dart';
 import 'package:tjw1/ui/views/summary/summary_controller.dart';
 
 class SummaryScreen extends StatefulWidget {
@@ -94,13 +92,16 @@ class _SummaryScreenState extends State<SummaryScreen> {
                     children: List.generate(
                       controller.visitorSummaryList.length,
                       (index) {
-                        VisitorSummary entry = controller.visitorSummaryList[index];
+                        VisitorSummary entry =
+                            controller.visitorSummaryList[index];
                         return Container(
                           width: double.infinity,
                           padding: EdgeInsets.all(16),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(0),
-                            border: Border(bottom: BorderSide(color: Color(0xffC0C0C0)))
+                            border: Border(
+                              bottom: BorderSide(color: Color(0xffC0C0C0)),
+                            ),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -110,7 +111,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 14,
-                                  color: Color(0xff151515)
+                                  color: Color(0xff151515),
                                 ),
                               ),
                               Text(
@@ -118,7 +119,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 14,
-                                    color: Color(0xff151515)
+                                  color: Color(0xff151515),
                                 ),
                               ),
                             ],
@@ -138,24 +139,24 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                         Column(
-                           children: [
-                             Text(
-                               "Total Amount",
-                               style: TextStyle(
-                                 fontWeight: FontWeight.w600,
-                                 fontSize: 18,
-                               ),
-                             ),
-                             // Text(
-                             //   "Inc Gst",
-                             //   style: TextStyle(
-                             //     fontWeight: FontWeight.w600,
-                             //     fontSize: 18,
-                             //   ),
-                             // ),
-                           ],
-                         ),
+                          Column(
+                            children: [
+                              Text(
+                                "Total Amount",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              // Text(
+                              //   "Inc Gst",
+                              //   style: TextStyle(
+                              //     fontWeight: FontWeight.w600,
+                              //     fontSize: 18,
+                              //   ),
+                              // ),
+                            ],
+                          ),
                           Text(
                             "₹${controller.totalPayableAmount}",
                             style: TextStyle(

@@ -4,6 +4,8 @@ import 'package:linkify_plus/linkify_plus.dart';
 import 'package:tjw1/ui/views/setting/setting_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/res/colors.dart';
+
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
 
@@ -42,7 +44,7 @@ class _SettingScreenState extends State<SettingScreen> {
       ),
       body: Column(
         children: [
-          Expanded (
+          Expanded(
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
@@ -51,7 +53,10 @@ class _SettingScreenState extends State<SettingScreen> {
                   children: [
                     Text(
                       "Settings",
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     const SizedBox(height: 16),
                     _buildExpandableTile(
@@ -74,10 +79,101 @@ class _SettingScreenState extends State<SettingScreen> {
                       content:
                           'Last updated on Feb. 01, 2023. Shipping is not applicable for business',
                     ),
+                    // SizedBox(height: 12),
+                    // _buildExpandableTile(
+                    //   title: "Account Deletion and Data Retention",
+                    //   content: controller.accountDeletion,
+                    // ),
                     SizedBox(height: 12),
-                    _buildExpandableTile(
-                      title: "Account Deletion and Data Retention",
-                      content: controller.accountDeletion,
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: const Color(0xffFCF4CB),
+                        border: Border.all(color: Colors.grey.shade300),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Row(
+                          children: [
+                            Icon(Icons.logout, size: 20),
+                            SizedBox(width: 16),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Log-Out",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Text(
+                                  "Sign out of your account",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xff5C5C5C),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 12),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: const Color(0xffFCF4CB),
+                        border: Border.all(color: Colors.grey.shade300),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Row(
+                          children: [
+                            Icon(Icons.delete_outline, size: 22),
+                            SizedBox(width: 16),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Delete",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Text(
+                                  "Remove your account",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xff5C5C5C),
+
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -127,7 +223,6 @@ class _SettingScreenState extends State<SettingScreen> {
   //   );
   // }
 
-
   Widget _buildExpandableTile({
     required String title,
     required String content,
@@ -151,12 +246,18 @@ class _SettingScreenState extends State<SettingScreen> {
           title,
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
         ),
-        childrenPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        childrenPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 10,
+        ),
         children: [
           Linkify(
             text: content,
             style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-            linkStyle: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
+            linkStyle: const TextStyle(
+              color: Colors.blue,
+              decoration: TextDecoration.underline,
+            ),
             onOpen: (link) async {
               final Uri url = Uri.parse(link.url);
               if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
@@ -168,5 +269,4 @@ class _SettingScreenState extends State<SettingScreen> {
       ),
     );
   }
-
 }

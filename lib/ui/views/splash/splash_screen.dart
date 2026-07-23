@@ -3,11 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:tjw1/ui/views/splash/splash_controller.dart';
 
-import '../../../helper/update_checker.dart';
 import '../../../services/onesignal_service.dart';
-
-
-
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -46,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SvgPicture.asset("assets/GJIIF_Logo.svg"),
-                )
+                ),
               ],
             ),
           ),

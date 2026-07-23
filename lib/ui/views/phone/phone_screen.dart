@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:pinput/pinput.dart';
 import 'package:tjw1/ui/views/phone/phone_controller.dart';
 
 import '../../../common_widget/common_button.dart';
@@ -128,7 +127,7 @@ class _PhoneScreenState extends State<PhoneScreen> {
                               },
                               child: Padding(
                                 padding: const EdgeInsets.only(right: 20),
-                                child:Text(
+                                child: Text(
                                   "Contact Helpline",
                                   style: TextStyle(
                                     color: Colors.blue,
@@ -136,8 +135,7 @@ class _PhoneScreenState extends State<PhoneScreen> {
                                     textBaseline: TextBaseline.alphabetic,
                                   ),
                                   textAlign: TextAlign.end,
-                                )
-
+                                ),
                               ),
                             ),
                           ),

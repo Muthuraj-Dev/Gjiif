@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -15,7 +14,6 @@ import 'package:tjw1/services/secure_storage_service.dart';
 import '../../../common_widget/common_button.dart';
 import '../../../common_widget/common_dialog.dart';
 import '../../../core/res/colors.dart';
-import '../select_visitor/select_visitor_screen.dart';
 
 class VisitorController extends GetxController {
   // if list is empty means :
@@ -127,6 +125,7 @@ class VisitorController extends GetxController {
   }
 
   var visitorListData = <VisitorListData>[].obs;
+
   // ✅ Flag to avoid unnecessary API calls
   bool _hasFetchedVisitors = false;
 
@@ -152,6 +151,47 @@ class VisitorController extends GetxController {
       }
     } catch (e) {
       print('Error fetching state list: $e');
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> deleteVisitor(int visitorId) async {
+    try {
+      isLoading(true);
+
+      Map<String, dynamic> response =
+          await ApiBaseService.request<Map<String, dynamic>>(
+            'VisitorDetail/DeleteVisitor?visitorId=$visitorId',
+            method: RequestMethod.GET,
+            authenticated: false,
+          );
+
+      if (response['status'] == "200") {
+        Get.back(); // Close confirmation dialog
+
+        Get.snackbar(
+          "Success",
+          response['message'] ?? "Visitor deleted successfully",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+
+        // Refresh visitor list
+        await fetchVisitorList(forceRefresh: true);
+      } else {
+        Get.snackbar(
+          "Error",
+          response['message'] ?? "Failed to delete visitor",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        "Something went wrong",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      print("Delete Visitor Error: $e");
     } finally {
       isLoading(false);
     }
@@ -412,7 +452,7 @@ class VisitorController extends GetxController {
         switch (type) {
           case 'businessCard':
             businessFileName.value = uploadedFileName;
-            businessFilePath.value =  response['data']['url'];
+            businessFilePath.value = response['data']['url'];
             break;
           case 'photo':
             passportPhotoName.value = uploadedFileName;

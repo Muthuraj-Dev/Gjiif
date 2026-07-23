@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -10,7 +8,6 @@ import 'package:tjw1/controllers/master_data_controller.dart';
 import 'package:tjw1/core/model/tjw/fetch_company_detail.dart';
 import 'package:tjw1/core/model/tjw/fetch_company_type.dart';
 import 'package:tjw1/core/model/tjw/stateList.dart';
-import 'package:tjw1/helper/file_upload_helper.dart';
 import 'package:tjw1/helper/utils/upload_utils.dart';
 import 'package:tjw1/services/api_base_service.dart';
 import 'package:tjw1/services/request_method.dart';
@@ -83,7 +80,6 @@ class CompanyController extends GetxController {
   final ScrollController scrollController = ScrollController();
   final RxBool showSaveButton = false.obs;
 
-
   @override
   void onInit() {
     print("GHGHG");
@@ -109,7 +105,6 @@ class CompanyController extends GetxController {
     super.onInit();
   }
 
-
   void _scrollListener() {
     if (!scrollController.hasClients) return;
 
@@ -123,7 +118,6 @@ class CompanyController extends GetxController {
       showSaveButton.value = shouldShow;
     }
   }
-
 
   Future<void> loadGstFromStorage() async {
     gstNumber = await SecureStorageService().read("gst");
@@ -157,17 +151,15 @@ class CompanyController extends GetxController {
     switch (fileKey) {
       case 'gstCopy':
         return (fileName, fileUrl) {
-                  gstCopyFileName.value = fileName;
-                  gstCopyFilePath.value = fileUrl;
-                  gstCopyError.value = '';
-                  isGstUploadedNow = true;
+          gstCopyFileName.value = fileName;
+          gstCopyFilePath.value = fileUrl;
+          gstCopyError.value = '';
+          isGstUploadedNow = true;
         };
       default:
         return null;
     }
   }
-
-
 
   Future<void> saveCompany() async {
     if (formKeyCompany.currentState?.validate() != true) {
@@ -232,7 +224,7 @@ class CompanyController extends GetxController {
     final id = int.tryParse(companyTypeId.value ?? '0');
     if (id == null || id == 0) return null; // ✅ Let it be null to show hint
     return companyTypeList.firstWhere(
-          (e) => e.id == id,
+      (e) => e.id == id,
       orElse: () => CompanyTypeData(id: 0, companyType: ''),
     );
   }
@@ -265,7 +257,7 @@ class CompanyController extends GetxController {
 
         stateId.value = response.data?.stateID ?? "";
 
-        if (stateId.value != null && stateList.isNotEmpty) {
+        if (stateList.isNotEmpty) {
           final matchedState = stateList.firstWhere(
             (state) => state.stateID.toString() == stateId.value.toString(),
             orElse: () => StateData(stateID: 1, stateName: ''),

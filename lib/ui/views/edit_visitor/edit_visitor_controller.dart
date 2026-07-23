@@ -1,18 +1,12 @@
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import 'package:tjw1/controllers/master_data_controller.dart';
 import 'package:tjw1/core/model/tjw/designation_response.dart';
-import 'package:tjw1/helper/file_upload_helper.dart';
 import 'package:tjw1/helper/utils/upload_utils.dart';
 import 'package:tjw1/services/api_base_service.dart';
 import 'package:tjw1/services/request_method.dart';
-import 'package:toastification/toastification.dart';
 
 import '../../../common_widget/common_button.dart';
 import '../../../common_widget/common_dialog.dart';
@@ -79,8 +73,6 @@ class EditVisitorController extends GetxController {
   var isUploadLoading = false.obs;
   final RxString uploadingFileKey = ''.obs;
 
-
-
   RxBool isPhoneVerified = false.obs;
 
   bool isIDProofUploadedNow = false;
@@ -95,7 +87,6 @@ class EditVisitorController extends GetxController {
   final currentPhoneNumber = ''.obs;
 
   int currentVisitorId = 0;
-
 
   final MasterDataController masterData = Get.find();
   RxList<DesignationData> designationList = <DesignationData>[].obs;
@@ -306,7 +297,6 @@ class EditVisitorController extends GetxController {
     } finally {
       isLoading(false);
     }
-
   }
 
   void handleFileUpload(BuildContext context, String fileKey) {
@@ -480,7 +470,7 @@ class EditVisitorController extends GetxController {
                     print("Invalid OTP: must be 4 digits");
                     return;
                   }
-                  if(isOTPVerifyLoading.value) return;
+                  if (isOTPVerifyLoading.value) return;
                   verifyOtp();
                 },
 
@@ -535,7 +525,7 @@ class EditVisitorController extends GetxController {
     try {
       isOTPVerifyLoading(true);
       final OtpVerify response = await ApiBaseService.request<OtpVerify>(
-        'OTP/OTPVerify?otpID=${optID.value}&mobileNumber=${phoneNumberController.text}&visitorID=${visitorId}&enteredOTP=$enteredOTP',
+        'OTP/OTPVerify?otpID=${optID.value}&mobileNumber=${phoneNumberController.text}&visitorID=$visitorId&enteredOTP=$enteredOTP',
         method: RequestMethod.GET,
         authenticated: false,
       );
@@ -549,7 +539,7 @@ class EditVisitorController extends GetxController {
         getPhoneNumberDB.value =
             phoneNumberController.text; // Now set as verified version
         Get.back();
-      } else if (response.status == "100"){
+      } else if (response.status == "100") {
         Fluttertoast.showToast(
           msg: response.message ?? "Verified successfully",
         );

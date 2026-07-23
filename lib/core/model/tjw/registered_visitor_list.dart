@@ -64,7 +64,6 @@
 //   }
 // }
 
-
 class RegisteredVisitorResponse {
   String? status;
   String? message;
@@ -75,15 +74,16 @@ class RegisteredVisitorResponse {
   RegisteredVisitorResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    registeredData = json['data'] != null ? new RegisteredData.fromJson(json['data']) : null;
+    registeredData =
+        json['data'] != null ? RegisteredData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
-    if (this.registeredData != null) {
-      data['data'] = this.registeredData!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
+    if (registeredData != null) {
+      data['data'] = registeredData!.toJson();
     }
     return data;
   }
@@ -99,24 +99,24 @@ class RegisteredData {
     if (json['visitorsList'] != null) {
       visitorsList = <VisitorsList>[];
       json['visitorsList'].forEach((v) {
-        visitorsList!.add(new VisitorsList.fromJson(v));
+        visitorsList!.add(VisitorsList.fromJson(v));
       });
     }
     if (json['statusList'] != null) {
       statusList = <StatusList>[];
       json['statusList'].forEach((v) {
-        statusList!.add(new StatusList.fromJson(v));
+        statusList!.add(StatusList.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.visitorsList != null) {
-      data['visitorsList'] = this.visitorsList!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (visitorsList != null) {
+      data['visitorsList'] = visitorsList!.map((v) => v.toJson()).toList();
     }
-    if (this.statusList != null) {
-      data['statusList'] = this.statusList!.map((v) => v.toJson()).toList();
+    if (statusList != null) {
+      data['statusList'] = statusList!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -130,13 +130,14 @@ class VisitorsList {
   int? statusID;
   String? status;
 
-  VisitorsList(
-      {this.visitorID,
-        this.visitorName,
-        this.visitorPhotoURL,
-        this.visitorPhone,
-        this.statusID,
-        this.status});
+  VisitorsList({
+    this.visitorID,
+    this.visitorName,
+    this.visitorPhotoURL,
+    this.visitorPhone,
+    this.statusID,
+    this.status,
+  });
 
   VisitorsList.fromJson(Map<String, dynamic> json) {
     visitorID = json['visitorID'];
@@ -148,13 +149,13 @@ class VisitorsList {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['visitorID'] = this.visitorID;
-    data['visitorName'] = this.visitorName;
-    data['visitorPhotoURL'] = this.visitorPhotoURL;
-    data['visitorPhone'] = this.visitorPhone;
-    data['statusID'] = this.statusID;
-    data['status'] = this.status;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['visitorID'] = visitorID;
+    data['visitorName'] = visitorName;
+    data['visitorPhotoURL'] = visitorPhotoURL;
+    data['visitorPhone'] = visitorPhone;
+    data['statusID'] = statusID;
+    data['status'] = status;
     return data;
   }
 }
@@ -171,9 +172,9 @@ class StatusList {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['statusID'] = this.statusID;
-    data['status'] = this.status;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['statusID'] = statusID;
+    data['status'] = status;
     return data;
   }
 }

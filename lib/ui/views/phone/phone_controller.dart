@@ -1,15 +1,10 @@
 import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:tjw1/services/api_base_service.dart';
 import 'package:tjw1/services/request_method.dart';
-import 'package:tjw1/services/secure_storage_service.dart';
 import 'package:tjw1/ui/views/otp/otp_screen.dart';
-import 'package:tjw1/ui/views/phone/phone_screen.dart';
 import 'package:toastification/toastification.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../organization/organizationDetail_screen.dart';
 
 class PhoneController extends GetxController {
   final TextEditingController phoneController = TextEditingController();
@@ -37,7 +32,7 @@ class PhoneController extends GetxController {
         authenticated: false,
       );
 
-      print("KKKK : ${verifyResponse}");
+      print("KKKK : $verifyResponse");
       if (verifyResponse.isNotEmpty) {
         if (verifyResponse['status'] == "100") {
           toastification.show(
@@ -76,11 +71,6 @@ class PhoneController extends GetxController {
     } finally {
       isLoading(false);
     }
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
   }
 
   final String helplineNumber = "+919935043504";

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
@@ -64,7 +62,9 @@ class _VisitorDetailScreenState extends State<VisitorDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                  controller.isFromEdit ? "Edit Employee Details" : "Add Employee Details",
+                    controller.isFromEdit
+                        ? "Edit Employee Details"
+                        : "Add Employee Details",
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                   ),
                   SizedBox(height: 20),
@@ -201,13 +201,15 @@ class _VisitorDetailScreenState extends State<VisitorDetailScreen> {
                                   ),
                                 ),
                                 Spacer(),
-                               controller.currentPhoneNumber.value != controller.getPhoneNumberCheck.value ?
-                                Text(
-                                  "Unverified",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ) : SizedBox.shrink(),
+                                controller.currentPhoneNumber.value !=
+                                        controller.getPhoneNumberCheck.value
+                                    ? Text(
+                                      "Unverified",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    )
+                                    : SizedBox.shrink(),
                                 controller.isPhoneVerified.value
                                     ? Text(
                                       "Verified",
@@ -252,9 +254,12 @@ class _VisitorDetailScreenState extends State<VisitorDetailScreen> {
                                     onPressed: () async {
                                       controller.otpController.clear();
                                       print("Open OPT Dialog");
-                                      final success = await controller.sendOtp();
+                                      final success =
+                                          await controller.sendOtp();
                                       if (success) {
-                                        print("OTP sent successfully, opening dialog...",);
+                                        print(
+                                          "OTP sent successfully, opening dialog...",
+                                        );
                                         controller.openDialogBox();
                                       } else {
                                         Get.snackbar(
@@ -537,14 +542,12 @@ class _VisitorDetailScreenState extends State<VisitorDetailScreen> {
                           //       )
                           //       : SizedBox.shrink();
                           // }),
-
                           FilePreviewWidget(
                             filePath: controller.businessFilePath,
                             fileName: controller.businessFileName,
                             errorText: controller.businessError,
                             isLoading: controller.isLoading,
                           ),
-
 
                           SizedBox(height: 10),
 
@@ -597,6 +600,7 @@ class _VisitorDetailScreenState extends State<VisitorDetailScreen> {
                             ),
                           ),
                           SizedBox(height: 2),
+
                           // Obx(() {
                           //   final filePath = controller.passportPhotoPath.value;
                           //   final fileName = controller.passportPhotoName.value;
@@ -693,7 +697,6 @@ class _VisitorDetailScreenState extends State<VisitorDetailScreen> {
                           //       )
                           //       : SizedBox.shrink();
                           // }),
-
                           FilePreviewWidget(
                             filePath: controller.passportPhotoPath,
                             fileName: controller.passportPhotoName,
@@ -752,6 +755,7 @@ class _VisitorDetailScreenState extends State<VisitorDetailScreen> {
                             ),
                           ),
                           SizedBox(height: 2),
+
                           // Obx(() {
                           //   final filePath = controller.idProofPath.value;
                           //   final fileName = controller.idProofName.value;
@@ -847,7 +851,6 @@ class _VisitorDetailScreenState extends State<VisitorDetailScreen> {
                           //       )
                           //       : SizedBox.shrink();
                           // }),
-
                           FilePreviewWidget(
                             filePath: controller.idProofPath,
                             fileName: controller.idProofName,

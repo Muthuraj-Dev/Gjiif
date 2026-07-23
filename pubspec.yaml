@@ -71,6 +71,8 @@ dependencies:
   linkify_plus: ^6.0.3
   device_info_plus: ^11.5.0
   onesignal_flutter: ^5.4.1
+  animate_do: 4.2.0
+
 
 
 dev_dependencies:

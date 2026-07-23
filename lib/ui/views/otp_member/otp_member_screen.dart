@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:pinput/pinput.dart';
 import 'package:tjw1/common_widget/tap_outside_unfocus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -75,9 +73,7 @@ class _OtpMemberScreenState extends State<OtpMemberScreen> {
                       alignment: Alignment.centerRight,
                       child: Text(
                         "Change Number",
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                        ),
+                        style: TextStyle(decoration: TextDecoration.underline),
                       ),
                     ),
                   ),
@@ -267,6 +263,5 @@ class _OtpMemberScreenState extends State<OtpMemberScreen> {
         ),
       ),
     );
-
   }
 }

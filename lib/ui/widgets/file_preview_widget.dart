@@ -12,12 +12,12 @@ class FilePreviewWidget extends StatelessWidget {
   final RxBool isLoading;
 
   const FilePreviewWidget({
-    Key? key,
+    super.key,
     required this.filePath,
     required this.fileName,
     required this.errorText,
     required this.isLoading,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +87,6 @@ class FilePreviewWidget extends StatelessWidget {
         //     ),
         //   );
         // }),
-
         Obx(() {
           final path = filePath.value;
           final name = fileName.value;
@@ -97,9 +96,10 @@ class FilePreviewWidget extends StatelessWidget {
           final isNetwork = path.startsWith("http");
 
           // Add timestamp only if it's an image URL
-          final cacheBypassPath = !isPdf && isNetwork
-              ? "$path?ts=${DateTime.now().millisecondsSinceEpoch}"
-              : path;
+          final cacheBypassPath =
+              !isPdf && isNetwork
+                  ? "$path?ts=${DateTime.now().millisecondsSinceEpoch}"
+                  : path;
 
           return InkWell(
             onTap: () {
@@ -117,18 +117,22 @@ class FilePreviewWidget extends StatelessWidget {
                   height: MediaQuery.of(context).size.height * 0.6,
                   child: Padding(
                     padding: const EdgeInsets.all(6.0),
-                    child: isPdf
-                        ? isNetwork
-                        ? SfPdfViewer.network(path)
-                        : SfPdfViewer.file(File(path))
-                        : CachedNetworkImage(
-                      imageUrl: cacheBypassPath,
-                      fit: BoxFit.contain,
-                      placeholder: (context, url) =>
-                      const Center(child: CircularProgressIndicator()),
-                      errorWidget: (context, url, error) =>
-                      const Text('Failed to load image'),
-                    ),
+                    child:
+                        isPdf
+                            ? isNetwork
+                                ? SfPdfViewer.network(path)
+                                : SfPdfViewer.file(File(path))
+                            : CachedNetworkImage(
+                              imageUrl: cacheBypassPath,
+                              fit: BoxFit.contain,
+                              placeholder:
+                                  (context, url) => const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                              errorWidget:
+                                  (context, url, error) =>
+                                      const Text('Failed to load image'),
+                            ),
                   ),
                 ),
               );

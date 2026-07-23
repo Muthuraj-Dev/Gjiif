@@ -2,16 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:tjw1/ui/views/otp/otp_screen.dart';
-import 'package:tjw1/ui/views/otp_member/otp_member_screen.dart';
-import 'package:tjw1/ui/views/phone_member/phone_member_screen.dart';
 
 import '../../../common_widget/common_button.dart';
 import '../../../common_widget/common_text_field.dart';
 import '../../../common_widget/tap_outside_unfocus.dart';
 import '../../../core/res/colors.dart';
-import '../ebadge_member/ebadge_member_screen.dart';
-import '../phone/phone_screen.dart';
 import 'gst_controller.dart';
 
 class GstScreen extends StatefulWidget {
@@ -65,13 +60,13 @@ class _GstScreenState extends State<GstScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SizedBox(height: 10,),
+                          SizedBox(height: 10),
                           SvgPicture.asset(
                             "assets/GJIIF_Logo2.svg",
                             height: 100,
                           ),
                           SizedBox(height: size.height * 0.35),
-                          Align (
+                          Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                               "Enter your GST Number",
@@ -100,7 +95,9 @@ class _GstScreenState extends State<GstScreen> {
                                 );
                                 if (gstRegExp.hasMatch(val.toUpperCase())) {
                                   // ✅ Close keyboard only once GST is valid
-                                  FocusScope.of(controller.gstFocusNode.context!).unfocus();
+                                  FocusScope.of(
+                                    controller.gstFocusNode.context!,
+                                  ).unfocus();
                                 }
                               }
                             },
@@ -116,8 +113,7 @@ class _GstScreenState extends State<GstScreen> {
                               }
                               return null; // ✅ no unfocus here
                             },
-                          )
-
+                          ),
                         ],
                       ),
                     ),

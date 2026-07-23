@@ -1,8 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:tjw1/common_widget/common_dialog.dart';
 import 'package:tjw1/core/model/tjw/select_primary_number.dart';
 import 'package:tjw1/core/res/colors.dart';
@@ -23,109 +20,102 @@ class _SelectPrimaryScreenState extends State<SelectPrimaryScreen> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-          () =>
-          Stack(
-            children: [
-              Scaffold(
-                backgroundColor: AppColor.background,
-                appBar: _buildAppBar(),
-                body: SafeArea(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Select Primary Number",
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        Expanded(
-                          child: ListView.separated(
-                            itemCount: widget.data!.length,
-                            itemBuilder: (context, index) {
-                              VisitorPhone data = widget.data![index];
-                              return InkWell(
-                                onTap: () {
-                                  print(index);
-                                  print(data.visitorID);
-                                  CommonDialog.showConfirmDialog(
-                                    title: "Select Primary Number",
-                                    content:
-                                    "Do you want to set this ${data
-                                        .mobileNumber} number as your primary contact?",
-                                    confirmText: "Yes",
-                                    cancelText: "No",
-                                    leading: Icon(
-                                      Icons.account_box_rounded,
-                                      size: 48,
-                                      color: AppColor.primary,
-                                    ),
-                                    onConfirm: () {
-                                      controller.setPrimaryNumber(data);
-                                    },
-                                    onCancel: () {
-                                      // Get.back(); // Optional: Close dialog
-                                    },
-                                  );
+      () => Stack(
+        children: [
+          Scaffold(
+            backgroundColor: AppColor.background,
+            appBar: _buildAppBar(),
+            body: SafeArea(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Select Primary Number",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Expanded(
+                      child: ListView.separated(
+                        itemCount: widget.data!.length,
+                        itemBuilder: (context, index) {
+                          VisitorPhone data = widget.data![index];
+                          return InkWell(
+                            onTap: () {
+                              print(index);
+                              print(data.visitorID);
+                              CommonDialog.showConfirmDialog(
+                                title: "Select Primary Number",
+                                content:
+                                    "Do you want to set this ${data.mobileNumber} number as your primary contact?",
+                                confirmText: "Yes",
+                                cancelText: "No",
+                                leading: Icon(
+                                  Icons.account_box_rounded,
+                                  size: 48,
+                                  color: AppColor.primary,
+                                ),
+                                onConfirm: () {
+                                  controller.setPrimaryNumber(data);
                                 },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .spaceBetween,
+                                onCancel: () {
+                                  // Get.back(); // Optional: Close dialog
+                                },
+                              );
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .start,
-                                      children: [
-                                        Text(
-                                          "Visitor ID : ${data.visitorID}",
-                                          style: TextStyle(fontSize: 16),
-                                        ),
-                                        SizedBox(height: 6),
-                                        Text(
-                                          "Phone Number : ${data.mobileNumber}",
-                                          style: TextStyle(fontSize: 16),
-                                        ),
-                                      ],
+                                    Text(
+                                      "Visitor ID : ${data.visitorID}",
+                                      style: TextStyle(fontSize: 16),
                                     ),
-                                    Icon(Icons.arrow_forward_ios_rounded,
-                                        size: 20),
+                                    SizedBox(height: 6),
+                                    Text(
+                                      "Phone Number : ${data.mobileNumber}",
+                                      style: TextStyle(fontSize: 16),
+                                    ),
                                   ],
                                 ),
-                              );
-                            },
-                            separatorBuilder: (BuildContext context,
-                                int index) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8),
-                                child: Divider(color: AppColor.border),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
+                                Icon(Icons.arrow_forward_ios_rounded, size: 20),
+                              ],
+                            ),
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: Divider(color: AppColor.border),
+                          );
+                        },
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
-
-              if (controller.isLoading.value)
-                Container(
-                  color: Colors.black.withOpacity(0.3),
-                  // Optional: darken background
-                  child: const Center(child: CircularProgressIndicator()),
-                ),
-            ],
+            ),
           ),
+
+          if (controller.isLoading.value)
+            Container(
+              color: Colors.black.withOpacity(0.3),
+              // Optional: darken background
+              child: const Center(child: CircularProgressIndicator()),
+            ),
+        ],
+      ),
     );
   }
 
   PreferredSizeWidget _buildAppBar() =>
-      //     AppBar(
+  //     AppBar(
   //   elevation: 0,
   //   backgroundColor: Colors.transparent,
   //   leadingWidth: 130,
@@ -143,7 +133,6 @@ class _SelectPrimaryScreenState extends State<SelectPrimaryScreen> {
   //     ),
   //   ),
   // );
-
   AppBar(
     elevation: 0,
     backgroundColor: Colors.transparent,

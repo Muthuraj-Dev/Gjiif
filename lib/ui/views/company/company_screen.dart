@@ -1,10 +1,5 @@
-import 'dart:io';
-
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-import 'package:tjw1/common_widget/common_dialog.dart';
 import 'package:tjw1/core/model/tjw/fetch_company_type.dart';
 import 'package:tjw1/core/model/tjw/stateList.dart';
 import 'package:tjw1/ui/widgets/common_file_picker_box.dart';
@@ -14,7 +9,6 @@ import '../../../common_widget/common_button.dart';
 import '../../../common_widget/common_dropdown.dart';
 import '../../../common_widget/common_text_field.dart';
 import '../../../common_widget/tap_outside_unfocus.dart';
-import '../../../core/enum/view_state.dart';
 import '../../../core/res/colors.dart';
 import 'company_controller.dart';
 
@@ -114,26 +108,33 @@ class _CompanyScreenState extends State<CompanyScreen> {
                 Obx(() {
                   final shouldShow = controller.showSaveButton.value;
                   return Padding(
-                    padding: const EdgeInsets.only(bottom: 10,right: 20,left: 20),
+                    padding: const EdgeInsets.only(
+                      bottom: 10,
+                      right: 20,
+                      left: 20,
+                    ),
                     child: AnimatedSwitcher(
                       duration: Duration(milliseconds: 300),
-                      transitionBuilder: (child, animation) => FadeTransition(opacity: animation, child: child),
-                      child: shouldShow
-                          ? CommonButton(
-                        key: ValueKey("saveButton"),
-                        text: "Save",
-                        isLoading: controller.isLoading.value || controller.isUploadLoading.value,
-                        onPressed: () {
-                          controller.saveCompany();
-                        },
-                      )
-                          : SizedBox.shrink(
-                        key: ValueKey("emptySpace"),
-                      ),
+                      transitionBuilder:
+                          (child, animation) =>
+                              FadeTransition(opacity: animation, child: child),
+                      child:
+                          shouldShow
+                              ? CommonButton(
+                                key: ValueKey("saveButton"),
+                                text: "Save",
+                                isLoading:
+                                    controller.isLoading.value ||
+                                    controller.isUploadLoading.value,
+                                onPressed: () {
+                                  controller.saveCompany();
+                                },
+                              )
+                              : SizedBox.shrink(key: ValueKey("emptySpace")),
                     ),
                   );
                 }),
-
+                SizedBox(height: 28,)
               ],
             ),
             Obx(() {

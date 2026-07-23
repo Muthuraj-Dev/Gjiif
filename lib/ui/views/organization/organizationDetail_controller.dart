@@ -1,8 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -12,7 +9,6 @@ import 'package:tjw1/core/model/tjw/fetch_company_detail.dart';
 import 'package:tjw1/core/model/tjw/fetch_company_type.dart';
 import 'package:tjw1/core/model/tjw/stateList.dart';
 import 'package:tjw1/core/res/colors.dart';
-import 'package:tjw1/helper/file_upload_helper.dart';
 import 'package:tjw1/helper/utils/upload_utils.dart';
 import 'package:tjw1/services/api_base_service.dart';
 import 'package:tjw1/services/request_method.dart';
@@ -114,12 +110,10 @@ class OrganizationDetailController extends GetxController {
     if (id == null || id == 0) return null;
 
     return stateList.firstWhere(
-          (e) => e.stateID == id,
+      (e) => e.stateID == id,
       orElse: () => StateData(stateID: 0, stateName: '', countryID: null),
     );
   }
-
-
 
   Future<void> _loadGstFromStorage() async {
     gstNumber = await SecureStorageService().read("gst");
@@ -130,10 +124,10 @@ class OrganizationDetailController extends GetxController {
       companyGstController.text = gstNumber!;
     }
 
-    if (statusCode == "300") {            // 300 means partially company details there , 400 - no company details at all
-     await fetchCompanyDetail(visitorId);
+    if (statusCode == "300") {
+      // 300 means partially company details there , 400 - no company details at all
+      await fetchCompanyDetail(visitorId);
     }
-
   }
 
   void handleFileUpload(BuildContext context, String fileKey) {
@@ -184,7 +178,7 @@ class OrganizationDetailController extends GetxController {
 
       var bodyData = {
         "gstN": gstNumber,
-        "companyType": companyTypeId.value , // companyTypeController.text,
+        "companyType": companyTypeId.value, // companyTypeController.text,
         "companyName": companyNameController.text,
         "address": communicationAddressController.text,
         "mobileNumber": mobileNumber,
@@ -194,42 +188,49 @@ class OrganizationDetailController extends GetxController {
         "district": districtController.text,
         "landline": landlineController.text,
         "gstFileName": gstCopyFileName.value,
-        "saveFlag": statusCode == "300" ? 1 : 2,   // 2 insert  -    1 -update - data incompleted
-        "gstChangedFlag": statusCode == "400" ? 1 : isGstUploadedNow ? 1 : 0,     // 0 means- no chnage,    1 - update /new    gst new upload - 1, gst repload - 1 , gst no upload just save - 0
+        "saveFlag":
+            statusCode == "300"
+                ? 1
+                : 2, // 2 insert  -    1 -update - data incompleted
+        "gstChangedFlag":
+            statusCode == "400"
+                ? 1
+                : isGstUploadedNow
+                ? 1
+                : 0, // 0 means- no chnage,    1 - update /new    gst new upload - 1, gst repload - 1 , gst no upload just save - 0
       };
 
       print(jsonEncode(bodyData));
 
       print("cdddddd $bodyData");
-      final Map<String, dynamic> response = await ApiBaseService.request<Map<String, dynamic>>(
-        'CompanyDetails/Save',
-        body: bodyData,
-        method: RequestMethod.POST,
-        authenticated: false,
-      );
+      final Map<String, dynamic> response =
+          await ApiBaseService.request<Map<String, dynamic>>(
+            'CompanyDetails/Save',
+            body: bodyData,
+            method: RequestMethod.POST,
+            authenticated: false,
+          );
 
-      if(response['status'] == "200"){
+      if (response['status'] == "200") {
         Fluttertoast.showToast(msg: response['message'] ?? "");
-        await SecureStorageService().write("visitorID", response['visitorID'].toString());
+        await SecureStorageService().write(
+          "visitorID",
+          response['visitorID'].toString(),
+        );
         CommonDialog.showConfirmDialog(
           title: "Organization Saved",
           content: "The organization details have been saved successfully.",
           confirmText: "Done",
           cancelTextHide: true,
-          leading: Icon(
-            Icons.save,
-            size: 48,
-            color: AppColor.primary,
-          ),
+          leading: Icon(Icons.save, size: 48, color: AppColor.primary),
           onConfirm: () {
             Get.offAll(() => DashboardScreen());
           },
         );
-
       }
 
       //
-    } catch (e, stackTrace) {
+    } catch (e) {
       print('Error: $e');
       Get.snackbar("Error", "Something went wrong");
       // logErrorToBackend(
@@ -240,36 +241,34 @@ class OrganizationDetailController extends GetxController {
     } finally {
       isLoading(false);
     }
-
   }
-
 
   CompanyTypeData? get selectedCompanyType {
     final id = int.tryParse(companyTypeId.value ?? '0');
     if (id == null || id == 0) return null;
     return companyTypeList.firstWhere(
-          (e) => e.id == id,
+      (e) => e.id == id,
       orElse: () => CompanyTypeData(id: 0, companyType: ''),
     );
   }
-
 
   Future<void> fetchCompanyDetail(String? visitorId) async {
     try {
       isLoading(true);
 
-      final FetchCompanyDetail response = await ApiBaseService.request<FetchCompanyDetail>(
+      final FetchCompanyDetail
+      response = await ApiBaseService.request<FetchCompanyDetail>(
         'CompanyDetails/GetCompanyDetail?GSTN=$gstNumber&VisitorID=$visitorId',
         method: RequestMethod.GET,
         authenticated: false,
       );
 
-      if(response.status == "200"){
+      if (response.status == "200") {
         companyTypeId.value = response.data?.companyType ?? "";
         print("=== companyTypeId ${companyTypeId.value}");
         if (companyTypeId.value.isNotEmpty && companyTypeList.isNotEmpty) {
           final matchedCompany = companyTypeList.firstWhere(
-                (type) => type.id.toString() == companyTypeId.value.toString(),
+            (type) => type.id.toString() == companyTypeId.value.toString(),
             orElse: () => CompanyTypeData(id: 1, companyType: ''),
           );
           companyTypeController.text = matchedCompany.companyType ?? "";
@@ -284,9 +283,9 @@ class OrganizationDetailController extends GetxController {
         stateId.value = response.data?.stateID ?? "";
 
         print("=== stateId ${stateId.value}");
-        if (stateId.value != null && stateList.isNotEmpty) {
+        if (stateList.isNotEmpty) {
           final matchedState = stateList.firstWhere(
-                (state) => state.stateID.toString() == stateId.value.toString(),
+            (state) => state.stateID.toString() == stateId.value.toString(),
             orElse: () => StateData(stateID: 1, stateName: ''),
           );
           stateController.text = matchedState.stateName ?? "";
@@ -301,7 +300,6 @@ class OrganizationDetailController extends GetxController {
 
         print("gstCopyFilePath  $gstCopyFilePath");
         print("gstCopyFileName  $gstCopyFileName");
-
       }
 
       print("COMPANY FETCH : ${response.toJson()}");
@@ -314,6 +312,4 @@ class OrganizationDetailController extends GetxController {
       isLoading(false);
     }
   }
-
-
 }

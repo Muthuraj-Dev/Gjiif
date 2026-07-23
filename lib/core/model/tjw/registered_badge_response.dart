@@ -3,7 +3,11 @@ class RegisteredBadgeResponse {
   String? message;
   List<RegisteredVisitorBadgeList>? registeredVisitorBadgeList;
 
-  RegisteredBadgeResponse({this.status, this.message, this.registeredVisitorBadgeList});
+  RegisteredBadgeResponse({
+    this.status,
+    this.message,
+    this.registeredVisitorBadgeList,
+  });
 
   RegisteredBadgeResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -11,17 +15,18 @@ class RegisteredBadgeResponse {
     if (json['data'] != null) {
       registeredVisitorBadgeList = <RegisteredVisitorBadgeList>[];
       json['data'].forEach((v) {
-        registeredVisitorBadgeList!.add(new RegisteredVisitorBadgeList.fromJson(v));
+        registeredVisitorBadgeList!.add(RegisteredVisitorBadgeList.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
-    if (this.registeredVisitorBadgeList != null) {
-      data['data'] = this.registeredVisitorBadgeList!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
+    if (registeredVisitorBadgeList != null) {
+      data['data'] =
+          registeredVisitorBadgeList!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -33,11 +38,12 @@ class RegisteredVisitorBadgeList {
   String? visitorPhone;
   String? photoURL;
 
-  RegisteredVisitorBadgeList(
-      {this.visitorName,
-        this.registrationID,
-        this.visitorPhone,
-        this.photoURL});
+  RegisteredVisitorBadgeList({
+    this.visitorName,
+    this.registrationID,
+    this.visitorPhone,
+    this.photoURL,
+  });
 
   RegisteredVisitorBadgeList.fromJson(Map<String, dynamic> json) {
     visitorName = json['visitorName'];
@@ -47,11 +53,11 @@ class RegisteredVisitorBadgeList {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['visitorName'] = this.visitorName;
-    data['registrationID'] = this.registrationID;
-    data['visitorPhone'] = this.visitorPhone;
-    data['photoURL'] = this.photoURL;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['visitorName'] = visitorName;
+    data['registrationID'] = registrationID;
+    data['visitorPhone'] = visitorPhone;
+    data['photoURL'] = photoURL;
     return data;
   }
 }

@@ -1,8 +1,5 @@
-import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:tjw1/common_widget/tap_outside_unfocus.dart';
 import 'package:tjw1/core/res/colors.dart';
 import 'package:tjw1/ui/views/edit_visitor/edit_visitor_controller.dart';
@@ -67,7 +64,10 @@ class _EditVisitorScreenState extends State<EditVisitorScreen> {
                     children: [
                       Text(
                         "Edit Employee Details",
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       SizedBox(height: 20),
 
@@ -99,7 +99,10 @@ class _EditVisitorScreenState extends State<EditVisitorScreen> {
                                   hintText: 'Gender',
                                   selectedItem:
                                       controller.gender.value.isNotEmpty
-                                          ? controller.gender.value.capitalizeFirst
+                                          ? controller
+                                              .gender
+                                              .value
+                                              .capitalizeFirst
                                           : null,
                                   onChanged: (value) {
                                     final selected = Gender.values.firstWhere(
@@ -158,19 +161,27 @@ class _EditVisitorScreenState extends State<EditVisitorScreen> {
                                 () => CommonDropdown<DesignationData>(
                                   items: controller.designationList.toList(),
                                   hintText: 'Select designation*',
-                                  selectedItem: (() {
-                                    final id = int.tryParse(controller.designationID.value ?? '0');
-                                    if (id == null || id == 0) return null;
+                                  selectedItem:
+                                      (() {
+                                        final id = int.tryParse(
+                                          controller.designationID.value ?? '0',
+                                        );
+                                        if (id == null || id == 0) return null;
 
-                                    try {
-                                      return controller.designationList.firstWhere((e) => e.designationID == id);
-                                    } catch (_) {
-                                      return null;
-                                    }
-                                  })(),
-                                  itemAsString: (state) => state.designation ?? '',
+                                        try {
+                                          return controller.designationList
+                                              .firstWhere(
+                                                (e) => e.designationID == id,
+                                              );
+                                        } catch (_) {
+                                          return null;
+                                        }
+                                      })(),
+                                  itemAsString:
+                                      (state) => state.designation ?? '',
                                   compareFn:
-                                      (a, b) => a.designationID == b.designationID,
+                                      (a, b) =>
+                                          a.designationID == b.designationID,
                                   onChanged: (value) {
                                     if (value != null) {
                                       controller.designationController.text =
@@ -190,28 +201,44 @@ class _EditVisitorScreenState extends State<EditVisitorScreen> {
                               ),
                               SizedBox(height: 10),
                               Obx(() {
-                                final isChanged = controller.phoneNumberController.text != controller.getPhoneNumberDB.value;
+                                final isChanged =
+                                    controller.phoneNumberController.text !=
+                                    controller.getPhoneNumberDB.value;
                                 return Row(
                                   children: [
                                     Text(
                                       "Phone Number",
-                                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                     Spacer(),
-                                    if (isChanged || !controller.isPhoneVerified.value)
+                                    if (isChanged ||
+                                        !controller.isPhoneVerified.value)
                                       Text(
                                         "Unverified",
-                                        style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
-                                    if (controller.isPhoneVerified.value && !isChanged)
+                                    if (controller.isPhoneVerified.value &&
+                                        !isChanged)
                                       Row(
                                         children: [
                                           Text(
                                             "Verified",
-                                            style: TextStyle(color: Colors.green, fontWeight: FontWeight.w600),
+                                            style: TextStyle(
+                                              color: Colors.green,
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                           ),
                                           SizedBox(width: 4),
-                                          Icon(Icons.verified_rounded, color: Colors.green),
+                                          Icon(
+                                            Icons.verified_rounded,
+                                            color: Colors.green,
+                                          ),
                                         ],
                                       ),
                                   ],
@@ -236,11 +263,16 @@ class _EditVisitorScreenState extends State<EditVisitorScreen> {
                                       () => CommonButton(
                                         text: "Send OTP",
                                         padding: EdgeInsets.zero,
-                                        isLoading: controller.isOTPLoading.value,
-                                        isDisabled: !controller.isPhoneValid.value || controller.isPhoneVerified.value,
+                                        isLoading:
+                                            controller.isOTPLoading.value,
+                                        isDisabled:
+                                            !controller.isPhoneValid.value ||
+                                            controller.isPhoneVerified.value,
                                         onPressed: () async {
                                           controller.otpController.clear();
-                                          if (controller.isOTPLoading.value) return;
+                                          if (controller.isOTPLoading.value) {
+                                            return;
+                                          }
                                           print("Open OPT Dialog");
                                           final success =
                                               await controller.sendOtp();
@@ -266,7 +298,7 @@ class _EditVisitorScreenState extends State<EditVisitorScreen> {
                                   if (controller.phoneNumberController.text !=
                                       controller.getPhoneNumberDB.value) {
                                     controller.isPhoneVerified.value = false;
-                                  }else{
+                                  } else {
                                     controller.isPhoneVerified.value = true;
                                   }
                                 },
@@ -341,7 +373,10 @@ class _EditVisitorScreenState extends State<EditVisitorScreen> {
                                   hintText: 'ID-Type',
                                   selectedItem:
                                       controller.idType.value.isNotEmpty
-                                          ? controller.idType.value.capitalizeFirst
+                                          ? controller
+                                              .idType
+                                              .value
+                                              .capitalizeFirst
                                           : null,
                                   onChanged: (value) {
                                     final selected = IDType.values.firstWhere(
@@ -474,24 +509,29 @@ class _EditVisitorScreenState extends State<EditVisitorScreen> {
                           padding: const EdgeInsets.only(bottom: 10),
                           child: AnimatedSwitcher(
                             duration: Duration(milliseconds: 300),
-                            transitionBuilder: (child, animation) => FadeTransition(opacity: animation, child: child),
-                            child: shouldShow
-                                ? CommonButton(
-                              key: ValueKey("saveButton"),
-                              text: "Save",
-                              isLoading: controller.isLoading.value || controller.isUploadLoading.value,
-                              onPressed: () {
-                                controller.saveUpdatedVisitor(context);
-                              },
-                            )
-                                : SizedBox.shrink(
-                              key: ValueKey("emptySpace"),
-                            ),
+                            transitionBuilder:
+                                (child, animation) => FadeTransition(
+                                  opacity: animation,
+                                  child: child,
+                                ),
+                            child:
+                                shouldShow
+                                    ? CommonButton(
+                                      key: ValueKey("saveButton"),
+                                      text: "Save",
+                                      isLoading:
+                                          controller.isLoading.value ||
+                                          controller.isUploadLoading.value,
+                                      onPressed: () {
+                                        controller.saveUpdatedVisitor(context);
+                                      },
+                                    )
+                                    : SizedBox.shrink(
+                                      key: ValueKey("emptySpace"),
+                                    ),
                           ),
                         );
                       }),
-
-
                     ],
                   ),
                 ),
@@ -499,17 +539,15 @@ class _EditVisitorScreenState extends State<EditVisitorScreen> {
             ),
 
             Obx(() {
-              if (controller.isLoading.value ) {
+              if (controller.isLoading.value) {
                 return Container(
                   color: Colors.black.withOpacity(0.2),
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  child: const Center(child: CircularProgressIndicator()),
                 );
               } else {
                 return const SizedBox.shrink();
               }
-            })
+            }),
           ],
         ),
       ),

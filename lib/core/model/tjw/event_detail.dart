@@ -8,15 +8,15 @@ class EventDetailResponse {
   EventDetailResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    eventData = json['data'] != null ? new EventData.fromJson(json['data']) : null;
+    eventData = json['data'] != null ? EventData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
-    if (this.eventData != null) {
-      data['data'] = this.eventData!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
+    if (eventData != null) {
+      data['data'] = eventData!.toJson();
     }
     return data;
   }
@@ -29,25 +29,26 @@ class EventData {
   EventData({this.eventDetails, this.preRegistrationDetail});
 
   EventData.fromJson(Map<String, dynamic> json) {
-    eventDetails = json['eventDetails'] != null
-        ? new EventDetails.fromJson(json['eventDetails'])
-        : null;
+    eventDetails =
+        json['eventDetails'] != null
+            ? EventDetails.fromJson(json['eventDetails'])
+            : null;
     if (json['preRegistrationDetail'] != null) {
       preRegistrationDetail = <PreRegistrationDetail>[];
       json['preRegistrationDetail'].forEach((v) {
-        preRegistrationDetail!.add(new PreRegistrationDetail.fromJson(v));
+        preRegistrationDetail!.add(PreRegistrationDetail.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.eventDetails != null) {
-      data['eventDetails'] = this.eventDetails!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (eventDetails != null) {
+      data['eventDetails'] = eventDetails!.toJson();
     }
-    if (this.preRegistrationDetail != null) {
+    if (preRegistrationDetail != null) {
       data['preRegistrationDetail'] =
-          this.preRegistrationDetail!.map((v) => v.toJson()).toList();
+          preRegistrationDetail!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -64,16 +65,17 @@ class EventDetails {
   String? eventLogoURL;
   String? eventBannerURL;
 
-  EventDetails(
-      {this.eventID,
-        this.eventName,
-        this.eventVenue,
-        this.eventCity,
-        this.eventDates,
-        this.eventTitle,
-        this.eventDescription,
-        this.eventLogoURL,
-        this.eventBannerURL});
+  EventDetails({
+    this.eventID,
+    this.eventName,
+    this.eventVenue,
+    this.eventCity,
+    this.eventDates,
+    this.eventTitle,
+    this.eventDescription,
+    this.eventLogoURL,
+    this.eventBannerURL,
+  });
 
   EventDetails.fromJson(Map<String, dynamic> json) {
     eventID = json['eventID'];
@@ -88,16 +90,16 @@ class EventDetails {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['eventID'] = this.eventID;
-    data['eventName'] = this.eventName;
-    data['eventVenue'] = this.eventVenue;
-    data['eventCity'] = this.eventCity;
-    data['eventDates'] = this.eventDates;
-    data['eventTitle'] = this.eventTitle;
-    data['eventDescription'] = this.eventDescription;
-    data['eventLogoURL'] = this.eventLogoURL;
-    data['eventBannerURL'] = this.eventBannerURL;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['eventID'] = eventID;
+    data['eventName'] = eventName;
+    data['eventVenue'] = eventVenue;
+    data['eventCity'] = eventCity;
+    data['eventDates'] = eventDates;
+    data['eventTitle'] = eventTitle;
+    data['eventDescription'] = eventDescription;
+    data['eventLogoURL'] = eventLogoURL;
+    data['eventBannerURL'] = eventBannerURL;
     return data;
   }
 }
@@ -108,8 +110,12 @@ class PreRegistrationDetail {
   String? preRegistrationFee;
   String? phaseDate;
 
-  PreRegistrationDetail(
-      {this.eventID, this.phase, this.preRegistrationFee, this.phaseDate});
+  PreRegistrationDetail({
+    this.eventID,
+    this.phase,
+    this.preRegistrationFee,
+    this.phaseDate,
+  });
 
   PreRegistrationDetail.fromJson(Map<String, dynamic> json) {
     eventID = json['eventID'];
@@ -119,11 +125,11 @@ class PreRegistrationDetail {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['eventID'] = this.eventID;
-    data['phase'] = this.phase;
-    data['preRegistrationFee'] = this.preRegistrationFee;
-    data['phaseDate'] = this.phaseDate;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['eventID'] = eventID;
+    data['phase'] = phase;
+    data['preRegistrationFee'] = preRegistrationFee;
+    data['phaseDate'] = phaseDate;
     return data;
   }
 }

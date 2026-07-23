@@ -8,15 +8,16 @@ class PaymentSummaryResponse {
   PaymentSummaryResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    paymentSummaryData = json['data'] != null ? new PaymentSummaryData.fromJson(json['data']) : null;
+    paymentSummaryData =
+        json['data'] != null ? PaymentSummaryData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
-    if (this.paymentSummaryData != null) {
-      data['data'] = this.paymentSummaryData!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
+    if (paymentSummaryData != null) {
+      data['data'] = paymentSummaryData!.toJson();
     }
     return data;
   }
@@ -27,31 +28,35 @@ class PaymentSummaryData {
   EventDetail? eventDetail;
   int? totalPayment;
 
-  PaymentSummaryData({this.visitorSummary, this.eventDetail, this.totalPayment});
+  PaymentSummaryData({
+    this.visitorSummary,
+    this.eventDetail,
+    this.totalPayment,
+  });
 
   PaymentSummaryData.fromJson(Map<String, dynamic> json) {
     if (json['visitorSummary'] != null) {
       visitorSummary = <VisitorSummary>[];
       json['visitorSummary'].forEach((v) {
-        visitorSummary!.add(new VisitorSummary.fromJson(v));
+        visitorSummary!.add(VisitorSummary.fromJson(v));
       });
     }
-    eventDetail = json['eventDetail'] != null
-        ? new EventDetail.fromJson(json['eventDetail'])
-        : null;
+    eventDetail =
+        json['eventDetail'] != null
+            ? EventDetail.fromJson(json['eventDetail'])
+            : null;
     totalPayment = json['totalPayment'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.visitorSummary != null) {
-      data['visitorSummary'] =
-          this.visitorSummary!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (visitorSummary != null) {
+      data['visitorSummary'] = visitorSummary!.map((v) => v.toJson()).toList();
     }
-    if (this.eventDetail != null) {
-      data['eventDetail'] = this.eventDetail!.toJson();
+    if (eventDetail != null) {
+      data['eventDetail'] = eventDetail!.toJson();
     }
-    data['totalPayment'] = this.totalPayment;
+    data['totalPayment'] = totalPayment;
     return data;
   }
 }
@@ -70,10 +75,10 @@ class VisitorSummary {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['visitorID'] = this.visitorID;
-    data['visitorName'] = this.visitorName;
-    data['preRegistrationFee'] = this.preRegistrationFee;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['visitorID'] = visitorID;
+    data['visitorName'] = visitorName;
+    data['preRegistrationFee'] = preRegistrationFee;
     return data;
   }
 }
@@ -87,14 +92,15 @@ class EventDetail {
   String? city;
   String? eventLogoURL;
 
-  EventDetail(
-      {this.eventID,
-        this.eventMasterID,
-        this.eventName,
-        this.date,
-        this.venue,
-        this.city,
-        this.eventLogoURL});
+  EventDetail({
+    this.eventID,
+    this.eventMasterID,
+    this.eventName,
+    this.date,
+    this.venue,
+    this.city,
+    this.eventLogoURL,
+  });
 
   EventDetail.fromJson(Map<String, dynamic> json) {
     eventID = json['eventID'];
@@ -107,14 +113,14 @@ class EventDetail {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['eventID'] = this.eventID;
-    data['eventMasterID'] = this.eventMasterID;
-    data['eventName'] = this.eventName;
-    data['date'] = this.date;
-    data['venue'] = this.venue;
-    data['city'] = this.city;
-    data['eventLogoURL'] = this.eventLogoURL;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['eventID'] = eventID;
+    data['eventMasterID'] = eventMasterID;
+    data['eventName'] = eventName;
+    data['date'] = date;
+    data['venue'] = venue;
+    data['city'] = city;
+    data['eventLogoURL'] = eventLogoURL;
     return data;
   }
 }

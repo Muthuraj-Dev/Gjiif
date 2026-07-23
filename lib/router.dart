@@ -2,14 +2,8 @@ import 'package:get/get.dart';
 import 'package:tjw1/ui/views/add_visitor/add_visitor_screen.dart';
 import 'package:tjw1/ui/views/dashboard/dashboard_screen.dart';
 import 'package:tjw1/ui/views/organization/organizationDetail_screen.dart';
-import 'package:tjw1/ui/views/payment/payment_controller.dart';
 import 'package:tjw1/ui/views/splash/splash_binding.dart';
-import 'package:tjw1/ui/views/splash/splash_controller.dart';
 import 'package:tjw1/ui/views/splash/splash_screen.dart';
-
-import 'controllers/master_data_controller.dart';
-
-
 
 class AppRoutes {
   static const String splash = '/';
@@ -18,7 +12,6 @@ class AppRoutes {
   static const String organizationScreen = '/organization_screen';
 
   static const String addVisitor = '/add-visitor';
-
 
   static final List<GetPage> pages = [
     GetPage(
@@ -56,4 +49,3 @@ class AppRoutes {
 //     Get.put(MasterDataController());
 //   }
 // }
-

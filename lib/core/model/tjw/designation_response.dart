@@ -5,21 +5,20 @@ class DesignationResponse {
   DesignationResponse({this.response, this.data});
 
   DesignationResponse.fromJson(Map<String, dynamic> json) {
-    response = json['response'] != null
-        ? new Response.fromJson(json['response'])
-        : null;
+    response =
+        json['response'] != null ? Response.fromJson(json['response']) : null;
     if (json['data'] != null) {
       data = <DesignationData>[];
       json['data'].forEach((v) {
-        data!.add(new DesignationData.fromJson(v));
+        data!.add(DesignationData.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.response != null) {
-      data['response'] = this.response!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (response != null) {
+      data['response'] = response!.toJson();
     }
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
@@ -40,9 +39,9 @@ class Response {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
     return data;
   }
 }
@@ -59,9 +58,9 @@ class DesignationData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['designationID'] = this.designationID;
-    data['designation'] = this.designation;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['designationID'] = designationID;
+    data['designation'] = designation;
     return data;
   }
 }

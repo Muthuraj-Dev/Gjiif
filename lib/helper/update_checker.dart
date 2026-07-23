@@ -1,15 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
 
 import '../core/res/colors.dart';
-import '../core/res/styles.dart';
 import '../core/res/spacing.dart';
-import '../core/res/images.dart';
 import '../locator.dart';
 import '../services/appconfig_service.dart';
 import '../ui/widgets/button.dart';
@@ -48,7 +45,8 @@ class UpdateChecker {
       if (remoteVersion > localVersion) {
         // Use update dialog content from Remote Config
         final String title = update?.title ?? 'Update Available';
-        final String subtitle = update?.subtitle ??
+        final String subtitle =
+            update?.subtitle ??
             'A new version is available. Please update to continue.';
         final bool forceUpdate = update?.forceUpdate ?? false;
 
@@ -96,8 +94,7 @@ class UpdateChecker {
                       if (!forceUpdate) Get.back();
                     },
                   ),
-                  if (!forceUpdate)
-                    VerticalSpacing.custom(value: 12),
+                  if (!forceUpdate) VerticalSpacing.custom(value: 12),
                   if (!forceUpdate)
                     Button(
                       "Cancel",
@@ -195,5 +192,3 @@ class UpdateChecker {
     }
   }
 }
-
-

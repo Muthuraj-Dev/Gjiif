@@ -216,6 +216,8 @@ import '../../../common_widget/common_dropdown.dart';
 import '../../../common_widget/tap_outside_unfocus.dart';
 import '../../../core/model/tjw/registered_badge_response.dart';
 import '../../../core/res/colors.dart';
+import '../dashboard/dashboard_screen.dart';
+import '../home/home_controller.dart';
 import 'ebadge_controller.dart';
 
 class EbadgeScreen extends StatefulWidget {
@@ -230,12 +232,7 @@ class EbadgeScreen extends StatefulWidget {
 class _EbadgeScreenState extends State<EbadgeScreen> {
   final EbadgeController controller = Get.put(EbadgeController());
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   controller.dropdownListApi();
-  //   controller.registeredBadgeList();
-  // }
+  final HomeController homeController = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -251,8 +248,8 @@ class _EbadgeScreenState extends State<EbadgeScreen> {
                 children: [
                   _buildHeader(),
                   const SizedBox(height: 16),
-                   // _buildBadgeList(),
 
+                  // _buildBadgeList(),
                   if (controller.isLoading.value)
                     const Center(child: CircularProgressIndicator())
                   else if (controller.hasLoadedOnce.value &&
@@ -281,7 +278,9 @@ class _EbadgeScreenState extends State<EbadgeScreen> {
         Expanded(
           child: CommonDropdown<String>(
             items:
-                controller.dropdownList.map((e) => e.eventShortName ?? '').toList(),
+                controller.dropdownList
+                    .map((e) => e.eventShortName ?? '')
+                    .toList(),
             hintText: 'Select Event',
             selectedItem:
                 controller.eventController.text.isNotEmpty
@@ -322,9 +321,24 @@ class _EbadgeScreenState extends State<EbadgeScreen> {
           SvgPicture.asset("assets/NoVisitorFound.svg", height: 200),
           const SizedBox(height: 20),
           const Text(
-            "There is no data to show you right now",
+            "You haven't registered for any events yet.",
             style: TextStyle(fontSize: 18, color: Color(0xff4A4A4A)),
             textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+          CommonButton(
+            text: "Register Here",
+            width: 200,
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder:
+                    (_) =>
+                        DashboardBottomSheet(events: homeController.eventList),
+              );
+            },
           ),
         ],
       ),

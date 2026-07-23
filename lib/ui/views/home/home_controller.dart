@@ -7,8 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:tjw1/core/model/tjw/banner_event_response.dart';
 import 'package:tjw1/core/model/tjw/today_rate_card.dart';
 
-import '../../../core/enum/view_state.dart';
-
 import '../../../locator.dart';
 import '../../../services/api_base_service.dart';
 import '../../../services/appconfig_service.dart';
@@ -58,6 +56,46 @@ class HomeController extends GetxController {
       isLoading(false);
     }
   }
+  String getMonth(String? date) {
+    if (date == null || date.isEmpty) return "--";
+
+    try {
+      return DateFormat('MMM')
+          .format(DateTime.parse(date))
+          .toUpperCase();
+    } catch (_) {
+      return "--";
+    }
+  }
+  String getDay(String? date) {
+    if (date == null || date.isEmpty) return "--";
+
+    try {
+      return DateFormat('d').format(DateTime.parse(date));
+    } catch (_) {
+      return "--";
+    }
+  }
+  String getYear(String? date) {
+    if (date == null || date.isEmpty) return "--";
+
+    try {
+      return DateFormat('yyyy').format(DateTime.parse(date));
+    } catch (_) {
+      return "--";
+    }
+  }
+
+  String getFormattedDate(String? date) {
+    if (date == null || date.isEmpty) return "";
+
+    try {
+      return DateFormat('dd MMM yyyy')
+          .format(DateTime.parse(date));
+    } catch (_) {
+      return date;
+    }
+  }
 
   DateTime? rateDatetime;
 
@@ -94,11 +132,6 @@ class HomeController extends GetxController {
     bannerImages.refresh();
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
   Future<bool> refreshRemoteConfig() async {
     try {
       final remoteConfig = FirebaseRemoteConfig.instance;
@@ -123,8 +156,3 @@ class HomeController extends GetxController {
   }
 }
 
-class Fruit {
-  final String name;
-
-  Fruit(this.name);
-}

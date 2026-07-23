@@ -1,8 +1,5 @@
 import 'dart:convert';
 
-import '../helper/update_checker.dart';
-
-
 // class AppConfigService {
 //   AppConfig _appConfig = AppConfig(
 //       appName: "Heavenly", baseApiUrl: "", firebaseNotificationApiKey: "");
@@ -75,7 +72,6 @@ class AppConfigService {
   }
 }
 
-
 class AppConfig {
   String? appName;
   String? baseApiUrl;
@@ -87,31 +83,33 @@ class AppConfig {
   List<String>? banners;
   String? termsAndConditions;
 
-  AppConfig(
-      {this.appName,
-        this.baseApiUrl,
-        this.firebaseNotificationApiKey,
-        this.cashfreeEnvironment,
-        this.android,
-        this.iOS,
-        this.update,
-        this.banners,
-        this.termsAndConditions});
+  AppConfig({
+    this.appName,
+    this.baseApiUrl,
+    this.firebaseNotificationApiKey,
+    this.cashfreeEnvironment,
+    this.android,
+    this.iOS,
+    this.update,
+    this.banners,
+    this.termsAndConditions,
+  });
 
   AppConfig.fromJson(Map<String, dynamic> json) {
     appName = json['AppName'];
     baseApiUrl = json['BaseApiUrl'];
     firebaseNotificationApiKey = json['FirebaseNotificationApiKey'];
     cashfreeEnvironment = json['cashfree_environment'];
-    android = json['Android'] != null ? new Android.fromJson(json['Android']) : null;
-    iOS = json['IOS'] != null ? new IOS.fromJson(json['IOS']) : null;
+    android =
+        json['Android'] != null ? Android.fromJson(json['Android']) : null;
+    iOS = json['IOS'] != null ? IOS.fromJson(json['IOS']) : null;
     update = json['Update'] != null ? Update.fromJson(json['Update']) : null;
     banners = json['Banners'].cast<String>();
     termsAndConditions = json['TermsAndConditions'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['AppName'] = appName;
     data['BaseApiUrl'] = baseApiUrl;
     data['FirebaseNotificationApiKey'] = firebaseNotificationApiKey;
@@ -145,7 +143,7 @@ class Android {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['Url'] = url;
     data['Version'] = version;
     data['AppID'] = appID;
@@ -167,7 +165,7 @@ class IOS {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['Url'] = url;
     data['Version'] = version;
     data['AppId'] = appId;
@@ -189,7 +187,7 @@ class Update {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['Title'] = title;
     data['Subtitle'] = subtitle;
     data['ForceUpdate'] = forceUpdate;

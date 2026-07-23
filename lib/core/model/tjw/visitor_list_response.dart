@@ -11,17 +11,17 @@ class VisitorListResponse {
     if (json['data'] != null) {
       visitorListData = <VisitorListData>[];
       json['data'].forEach((v) {
-        visitorListData!.add(new VisitorListData.fromJson(v));
+        visitorListData!.add(VisitorListData.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
-    if (this.visitorListData != null) {
-      data['data'] = this.visitorListData!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
+    if (visitorListData != null) {
+      data['data'] = visitorListData!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -36,14 +36,15 @@ class VisitorListData {
   int? isPrimary;
   int? isDataComplete;
 
-  VisitorListData(
-      {this.visitorID,
-        this.visitorName,
-        this.designation,
-        this.visitorMobile,
-        this.visitorPhoto,
-        this.isPrimary,
-        this.isDataComplete});
+  VisitorListData({
+    this.visitorID,
+    this.visitorName,
+    this.designation,
+    this.visitorMobile,
+    this.visitorPhoto,
+    this.isPrimary,
+    this.isDataComplete,
+  });
 
   VisitorListData.fromJson(Map<String, dynamic> json) {
     visitorID = json['visitorID'];
@@ -56,14 +57,14 @@ class VisitorListData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['visitorID'] = this.visitorID;
-    data['visitorName'] = this.visitorName;
-    data['designation'] = this.designation;
-    data['visitorMobile'] = this.visitorMobile;
-    data['visitorPhoto'] = this.visitorPhoto;
-    data['isPrimary'] = this.isPrimary;
-    data['isDataComplete'] = this.isDataComplete;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['visitorID'] = visitorID;
+    data['visitorName'] = visitorName;
+    data['designation'] = designation;
+    data['visitorMobile'] = visitorMobile;
+    data['visitorPhoto'] = visitorPhoto;
+    data['isPrimary'] = isPrimary;
+    data['isDataComplete'] = isDataComplete;
     return data;
   }
 }

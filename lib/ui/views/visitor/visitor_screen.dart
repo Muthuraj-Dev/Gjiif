@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/material.dart';
@@ -10,9 +8,7 @@ import 'package:tjw1/ui/views/visitor/visitor_controller.dart';
 import '../../../common_widget/common_button.dart';
 import '../../../common_widget/common_dialog.dart';
 import '../../../core/res/colors.dart';
-import '../add_visitor/add_visitor_binding.dart';
 import '../edit_visitor/edit_visitor_screen.dart';
-import '../visitor_detail/visitor_detail_screen.dart';
 
 class VisitorScreen extends StatefulWidget {
   const VisitorScreen({super.key});
@@ -355,9 +351,10 @@ class _VisitorListItemState extends State<VisitorListItem>
                               content: "Are you sure you want to remove ?",
                               confirmText: "Yes",
                               cancelText: "No",
-                              onConfirm: () {
-                                print("Item removed");
-                                Get.back();
+                              onConfirm: () async {
+                                await widget.controller.deleteVisitor(
+                                  widget.data.visitorID!,
+                                );
                               },
                               leading: Icon(
                                 Icons.warning_amber_rounded,
@@ -365,7 +362,7 @@ class _VisitorListItemState extends State<VisitorListItem>
                                 color: AppColor.primary,
                               ),
                               onCancel: () {
-                                Get.back(); // Just close the dialog
+                                Get.back();
                               },
                             );
                           },

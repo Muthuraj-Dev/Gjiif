@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -13,14 +12,11 @@ import 'package:tjw1/core/model/tjw/otp_verify.dart';
 import 'package:tjw1/services/api_base_service.dart';
 import 'package:tjw1/services/request_method.dart';
 import 'package:tjw1/services/secure_storage_service.dart';
-import 'package:tjw1/ui/views/phone/phone_controller.dart';
 
 import '../../../core/res/colors.dart';
-import '../select_visitor/select_visitor_screen.dart';
 
 class VisitorDetailController extends GetxController {
   // final dynamic isFromEdit = Get.arguments;
-
 
   final formKey = GlobalKey<FormState>();
 
@@ -78,7 +74,6 @@ class VisitorDetailController extends GetxController {
   var isLoading = false.obs;
   RxBool isPhoneVerified = false.obs;
 
-
   bool isIDProofUploadedNow = false;
   bool isBusinessCardUploadedNow = false;
   bool isPhotoUploadedNow = false;
@@ -89,11 +84,8 @@ class VisitorDetailController extends GetxController {
 
   bool isFromEdit = false;
 
-
   final getPhoneNumberCheck = ''.obs;
   final currentPhoneNumber = ''.obs;
-
-
 
   @override
   void onInit() {
@@ -111,46 +103,48 @@ class VisitorDetailController extends GetxController {
     print("isFromEdit $isFromEdit");
     final int currentVisitorId = args['visitorID'];
     print("currentVisitorId $currentVisitorId");
-    if(isFromEdit == true){
+    if (isFromEdit == true) {
       fetchVisitorDetails(currentVisitorId);
     }
 
     phoneNumberController.addListener(() {
       currentPhoneNumber.value = phoneNumberController.text;
     });
-
   }
 
   final RxString gender = ''.obs;
   final RxString idType = ''.obs;
 
-
   Future<void> fetchVisitorDetails(int currentVisitorId) async {
     try {
       isLoading(true);
-      final Map<String, dynamic> response = await ApiBaseService.request<Map<String, dynamic>>(
-        'VisitorDetail/GetVisitorDetail?visitorId=$currentVisitorId',
-        method: RequestMethod.GET,
-        authenticated: false,
-      );
+      final Map<String, dynamic> response =
+          await ApiBaseService.request<Map<String, dynamic>>(
+            'VisitorDetail/GetVisitorDetail?visitorId=$currentVisitorId',
+            method: RequestMethod.GET,
+            authenticated: false,
+          );
       if (response['status'] == "200") {
-        genderController.text = response['data']['gender'].toString().toLowerCase();
+        genderController.text =
+            response['data']['gender'].toString().toLowerCase();
 
         gender.value = response['data']['gender'].toString().toLowerCase();
 
         nameController.text = response['data']['visitorName'];
 
-        designationID.value = response['data']['designationID'].toString() ?? "";
+        designationID.value =
+            response['data']['designationID'].toString() ?? "";
 
         print("=== designationID ${designationID.value}");
-        if (designationID.value != null && designationList.isNotEmpty) {
+        if (designationList.isNotEmpty) {
           final matchedState = designationList.firstWhere(
-                (state) => state.designationID.toString() == designationID.value.toString(),
-            orElse: () => DesignationData(designationID : 1, designation: ''),
+            (state) =>
+                state.designationID.toString() ==
+                designationID.value.toString(),
+            orElse: () => DesignationData(designationID: 1, designation: ''),
           );
           designationController.text = matchedState.designation ?? "";
         }
-
 
         phoneNumberController.text = response['data']['visitorPhone'];
         getPhoneNumberCheck.value = response['data']['visitorPhone'];
@@ -159,18 +153,17 @@ class VisitorDetailController extends GetxController {
         idTypeController.text = response['data']['idProofType'];
         idType.value = response['data']['idProofType'];
 
-
         idNumberController.text = response['data']['idProofNumber'];
 
         businessFileName.value = response['data']['businessCardFileName'] ?? "";
         businessFilePath.value = response['data']['businessCardURL'] ?? "";
 
-        passportPhotoName.value = response['data']['visitorPhotoFileName'] ?? "";
+        passportPhotoName.value =
+            response['data']['visitorPhotoFileName'] ?? "";
         passportPhotoPath.value = response['data']['visitorPhotoURL'] ?? "";
 
         idProofName.value = response['data']['idProofFileName'] ?? "";
         idProofPath.value = response['data']['idProofURL'] ?? "";
-
       }
     } catch (e) {
       print('Error fetching state list: $e');
@@ -217,19 +210,21 @@ class VisitorDetailController extends GetxController {
       return;
     }
 
-    if(isFromEdit == true){
+    if (isFromEdit == true) {
       print('THIS IS EDIT SCREEN ${phoneNumberController.text}');
-      print('THIS IS EDIT SCREEN ${getPhoneNumberCheck}');
-      print('THIS IS EDIT SCREEN ${getPhoneNumberCheck } = ${phoneNumberController.text}');
+      print('THIS IS EDIT SCREEN $getPhoneNumberCheck');
+      print(
+        'THIS IS EDIT SCREEN $getPhoneNumberCheck  = ${phoneNumberController.text}',
+      );
       print("${getPhoneNumberCheck == phoneNumberController.text}");
-      if(getPhoneNumberCheck.value != phoneNumberController.text){
+      if (getPhoneNumberCheck.value != phoneNumberController.text) {
         isPhoneVerified.value = false;
-      }else{
+      } else {
         // isPhoneVerified.value = true;
       }
     }
 
-    if(isPhoneVerified.value == false){
+    if (isPhoneVerified.value == false) {
       Fluttertoast.showToast(msg: "Verify mobile number pending");
       return;
     }
@@ -257,8 +252,8 @@ class VisitorDetailController extends GetxController {
         "visitorPhotoURL": "",
         "visitorPhotoChangedFlag": isPhotoUploadedNow ? 1 : 0,
         "sourceOfRegistration": "",
-        "saveFlag": isFromEdit ? 1 : 2,   // 2 insert  -    1 -update - data incompleted
-
+        "saveFlag":
+            isFromEdit ? 1 : 2, // 2 insert  -    1 -update - data incompleted
         // "gstChangedFlag": statusCode == "400" ? 1 : isGstUploadedNow ? 1 : 0,     // 0 means- no chnage,    1 - update /new    gst new upload - 1, gst repload - 1 , gst no upload just save - 0
       };
 
@@ -275,7 +270,6 @@ class VisitorDetailController extends GetxController {
       //   Fluttertoast.showToast(msg: "${response['message']}");
       //   Get.back(result: 'refresh');
       // }
-
     } catch (e) {
       print('Error: $e');
       Get.snackbar("Error", "Something went wrong");
@@ -428,7 +422,7 @@ class VisitorDetailController extends GetxController {
         },
         'idProof': () {
           idProofName.value = fileName;
-     //     idPro ofPath.value = filePath;
+          //     idPro ofPath.value = filePath;
           idProofError.value = '';
         },
       };
@@ -453,7 +447,7 @@ class VisitorDetailController extends GetxController {
           case 'businessCard':
             businessFileName.value = uploadedFileName;
             isBusinessCardUploadedNow = true;
-            businessFilePath.value =  response['data']['url'];
+            businessFilePath.value = response['data']['url'];
             break;
           case 'photo':
             passportPhotoName.value = uploadedFileName;
@@ -623,7 +617,8 @@ class VisitorDetailController extends GetxController {
     try {
       isOTPLoading(true);
 
-      final Map<String, dynamic>verifyResponse = await ApiBaseService.request<Map<String, dynamic>>(
+      final Map<String, dynamic>
+      verifyResponse = await ApiBaseService.request<Map<String, dynamic>>(
         'VisitorDetail/VerifyMobileNumber?mobileNumber=${phoneNumberController.text}',
         method: RequestMethod.GET,
         authenticated: false,
@@ -651,13 +646,12 @@ class VisitorDetailController extends GetxController {
 
   var isOTPVerifyLoading = false.obs;
   Future<void> verifyOtp() async {
-
     final enteredOTP = otpController.text;
 
     try {
       isOTPVerifyLoading(true);
       final OtpVerify response = await ApiBaseService.request<OtpVerify>(
-        'OTP/OTPVerify?otpID=${optID.value}&mobileNumber=${phoneNumberController.text}&visitorID=${visitorId}&enteredOTP=$enteredOTP',
+        'OTP/OTPVerify?otpID=${optID.value}&mobileNumber=${phoneNumberController.text}&visitorID=$visitorId&enteredOTP=$enteredOTP',
         method: RequestMethod.GET,
         authenticated: false,
       );
@@ -677,6 +671,4 @@ class VisitorDetailController extends GetxController {
       isOTPVerifyLoading(false);
     }
   }
-
-
 }

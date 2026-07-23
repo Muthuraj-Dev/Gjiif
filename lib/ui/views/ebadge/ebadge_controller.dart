@@ -1,10 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:tjw1/core/model/tjw/dropdown_api.dart';
 import 'package:tjw1/core/model/tjw/registered_badge_response.dart';
 import 'package:tjw1/services/api_base_service.dart';
@@ -12,15 +7,12 @@ import 'package:tjw1/services/request_method.dart';
 import 'package:tjw1/services/secure_storage_service.dart';
 import 'package:tjw1/ui/views/pdf_view/pdf_view_screen.dart';
 
-import '../../../common_widget/common_dialog.dart';
-
 class EbadgeController extends GetxController {
   final TextEditingController eventController = TextEditingController();
 
   var isLoading = false.obs;
 
   final hasLoadedOnce = false.obs;
-
 
   // @override
   // void onInit() {
@@ -39,22 +31,20 @@ class EbadgeController extends GetxController {
   Future<void> _bootstrap() async {
     isLoading(true);
     try {
-      await loadGstFromStorage();     // step 1
-      await dropdownListApi();        // step 2 (event id resolved here)
+      await loadGstFromStorage(); // step 1
+      await dropdownListApi(); // step 2 (event id resolved here)
 
       if (selectedEventId == null) {
         throw Exception("Event ID not available");
       }
 
-      await registeredBadgeList();    // step 3 (safe)
+      await registeredBadgeList(); // step 3 (safe)
     } catch (e) {
       debugPrint("❌ Bootstrap failed: $e");
     } finally {
       isLoading(false);
     }
   }
-
-
 
   String? gstNumber;
   String? mobileNumber;
@@ -87,15 +77,14 @@ class EbadgeController extends GetxController {
     }
 
     Get.to(
-          () => PdfViewScreen(
+      () => PdfViewScreen(
         pdfUrl:
-        'https://gjiif.thejewelleryworld.com/VisitorDetail/ViewEBadge'
+            'https://gjiif.thejewelleryworld.com/VisitorDetail/ViewEBadge'
             '?RegistrationID=$registrationID&EventID=$selectedEventId',
         registerId: registrationID,
       ),
     );
   }
-
 
   RxList<RegisteredVisitorBadgeList> registeredList =
       <RegisteredVisitorBadgeList>[].obs;
@@ -135,15 +124,13 @@ class EbadgeController extends GetxController {
     try {
       final response = await ApiBaseService.request<RegisteredBadgeResponse>(
         'VisitorDetail/GetAllRegisteredVisitorsList'
-            '?GSTNumber=$gstNumber&EventID=$selectedEventId',
+        '?GSTNumber=$gstNumber&EventID=$selectedEventId',
         method: RequestMethod.GET,
         authenticated: false,
       );
 
       if (response.status == "200") {
-        registeredList.assignAll(
-          response.registeredVisitorBadgeList ?? [],
-        );
+        registeredList.assignAll(response.registeredVisitorBadgeList ?? []);
       }
     } catch (e) {
       debugPrint("❌ Error fetching visitors: $e");
@@ -152,7 +139,6 @@ class EbadgeController extends GetxController {
       isLoading(false);
     }
   }
-
 
   List<DropDownData> dropdownList = [];
 
@@ -187,7 +173,6 @@ class EbadgeController extends GetxController {
       if (response.status == "200" &&
           response.data != null &&
           response.data!.isNotEmpty) {
-
         dropdownList = response.data!;
         final firstEvent = dropdownList.first;
 
@@ -198,5 +183,4 @@ class EbadgeController extends GetxController {
       debugPrint("❌ Error fetching events: $e");
     }
   }
-
 }

@@ -1,5 +1,3 @@
-import 'package:tjw1/core/enum/view_state.dart';
-
 class FetchCompanyType {
   String? status;
   String? message;
@@ -13,17 +11,17 @@ class FetchCompanyType {
     if (json['data'] != null) {
       companyTypeData = <CompanyTypeData>[];
       json['data'].forEach((v) {
-        companyTypeData!.add(new CompanyTypeData.fromJson(v));
+        companyTypeData!.add(CompanyTypeData.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
-    if (this.companyTypeData != null) {
-      data['data'] = this.companyTypeData!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
+    if (companyTypeData != null) {
+      data['data'] = companyTypeData!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -41,9 +39,9 @@ class CompanyTypeData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['companyType'] = this.companyType;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['companyType'] = companyType;
     return data;
   }
 }

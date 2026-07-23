@@ -2,12 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:tjw1/core/model/tjw/otp_verify.dart';
-import 'package:tjw1/core/model/tjw/select_primary_number.dart';
 import 'package:tjw1/services/api_base_service.dart';
 import 'package:tjw1/services/request_method.dart';
 import 'package:tjw1/services/secure_storage_service.dart';
 import 'package:tjw1/ui/views/dashboard/dashboard_screen.dart';
-import 'package:tjw1/ui/views/phone/phone_screen.dart';
 
 import '../organization/organizationDetail_screen.dart';
 
@@ -25,7 +23,7 @@ class OtpController extends GetxController with WidgetsBindingObserver {
 
   var maskedPhone = ''.obs;
 
-  bool _canResend = true;
+  final bool _canResend = true;
 
   String otpID = '';
   String mobileNumber = '';
@@ -187,7 +185,7 @@ class OtpController extends GetxController with WidgetsBindingObserver {
     visitorID,
   }) async {
     print("isNewPrimaryNumber $isNewPrimaryNumber");
-    print("VisitorID ${visitorID}");
+    print("VisitorID $visitorID");
 
     try {
       isLoading(true);

@@ -8,13 +8,13 @@ class SingleOtpVerifyResponse {
   SingleOtpVerifyResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -37,20 +37,21 @@ class Data {
   String? phone;
   String? emailID;
 
-  Data(
-      {this.visitorID,
-        this.visitorPhotoURL,
-        this.status,
-        this.barcode,
-        this.visitorName,
-        this.designation,
-        this.company,
-        this.address,
-        this.city,
-        this.pincode,
-        this.gstn,
-        this.phone,
-        this.emailID});
+  Data({
+    this.visitorID,
+    this.visitorPhotoURL,
+    this.status,
+    this.barcode,
+    this.visitorName,
+    this.designation,
+    this.company,
+    this.address,
+    this.city,
+    this.pincode,
+    this.gstn,
+    this.phone,
+    this.emailID,
+  });
 
   Data.fromJson(Map<String, dynamic> json) {
     visitorID = json['visitorID'];
@@ -69,20 +70,20 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['visitorID'] = this.visitorID;
-    data['visitorPhotoURL'] = this.visitorPhotoURL;
-    data['status'] = this.status;
-    data['barcode'] = this.barcode;
-    data['visitorName'] = this.visitorName;
-    data['designation'] = this.designation;
-    data['company'] = this.company;
-    data['address'] = this.address;
-    data['city'] = this.city;
-    data['pincode'] = this.pincode;
-    data['gstn'] = this.gstn;
-    data['phone'] = this.phone;
-    data['emailID'] = this.emailID;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['visitorID'] = visitorID;
+    data['visitorPhotoURL'] = visitorPhotoURL;
+    data['status'] = status;
+    data['barcode'] = barcode;
+    data['visitorName'] = visitorName;
+    data['designation'] = designation;
+    data['company'] = company;
+    data['address'] = address;
+    data['city'] = city;
+    data['pincode'] = pincode;
+    data['gstn'] = gstn;
+    data['phone'] = phone;
+    data['emailID'] = emailID;
     return data;
   }
 }

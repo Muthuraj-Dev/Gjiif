@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:tjw1/common_widget/common_text_field.dart';
 import 'package:tjw1/common_widget/tap_outside_unfocus.dart';
 import 'package:tjw1/core/res/colors.dart';

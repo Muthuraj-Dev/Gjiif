@@ -5,24 +5,23 @@ class StateList {
   StateList({this.response, this.stateData});
 
   StateList.fromJson(Map<String, dynamic> json) {
-    response = json['response'] != null
-        ? new Response.fromJson(json['response'])
-        : null;
+    response =
+        json['response'] != null ? Response.fromJson(json['response']) : null;
     if (json['data'] != null) {
       stateData = <StateData>[];
       json['data'].forEach((v) {
-        stateData!.add(new StateData.fromJson(v));
+        stateData!.add(StateData.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.response != null) {
-      data['response'] = this.response!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (response != null) {
+      data['response'] = response!.toJson();
     }
-    if (this.stateData != null) {
-      data['data'] = this.stateData!.map((v) => v.toJson()).toList();
+    if (stateData != null) {
+      data['data'] = stateData!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -40,9 +39,9 @@ class Response {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
     return data;
   }
 }
@@ -61,10 +60,10 @@ class StateData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['stateID'] = stateID;
-    data['stateName'] = this.stateName;
-    data['countryID'] = this.countryID;
+    data['stateName'] = stateName;
+    data['countryID'] = countryID;
     return data;
   }
 }

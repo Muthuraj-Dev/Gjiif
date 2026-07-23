@@ -1,9 +1,5 @@
-import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:tjw1/helper/utils/upload_utils.dart';
 import 'package:tjw1/ui/views/add_visitor/add_visitor_controller.dart';
 import 'package:tjw1/ui/widgets/common_file_picker_box.dart';
 
@@ -17,8 +13,8 @@ import '../../../core/res/colors.dart';
 import '../../widgets/file_preview_widget.dart';
 
 class AddVisitorScreen extends StatefulWidget {
-  bool? isDashboardForm ;
-  AddVisitorScreen({this.isDashboardForm , super.key, });
+  bool? isDashboardForm;
+  AddVisitorScreen({this.isDashboardForm, super.key});
 
   @override
   State<AddVisitorScreen> createState() => _AddVisitorScreenState();
@@ -31,27 +27,30 @@ class _AddVisitorScreenState extends State<AddVisitorScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.background,
-      appBar: widget.isDashboardForm != true ? AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        // automaticallyImplyLeading: false,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        centerTitle: true,
-        title: Image.asset('assets/GJIIF_Logo.png', height: 35),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/splash_background.png'),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-      ) : null,
+      appBar:
+          widget.isDashboardForm != true
+              ? AppBar(
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+                // automaticallyImplyLeading: false,
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                centerTitle: true,
+                title: Image.asset('assets/GJIIF_Logo.png', height: 35),
+                flexibleSpace: Container(
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/splash_background.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              )
+              : null,
       body: TapOutsideUnFocus(
         child: Padding(
           padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
@@ -186,8 +185,10 @@ class _AddVisitorScreenState extends State<AddVisitorScreen> {
                         SizedBox(height: 10),
 
                         Obx(() {
-                          final textNumber = controller.phoneNumberController.text.trim();
-                          final dbNumber = controller.getPhoneNumberDB.value.trim();
+                          final textNumber =
+                              controller.phoneNumberController.text.trim();
+                          final dbNumber =
+                              controller.getPhoneNumberDB.value.trim();
                           final isChanged = textNumber != dbNumber;
                           final hasNumber = textNumber.isNotEmpty;
 
@@ -195,31 +196,46 @@ class _AddVisitorScreenState extends State<AddVisitorScreen> {
                             children: [
                               const Text(
                                 "Phone Number",
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               const Spacer(),
 
-                              if (hasNumber && (isChanged || !controller.isPhoneVerified.value))
+                              if (hasNumber &&
+                                  (isChanged ||
+                                      !controller.isPhoneVerified.value))
                                 const Text(
                                   "Unverified",
-                                  style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
 
-                              if (hasNumber && controller.isPhoneVerified.value && !isChanged)
+                              if (hasNumber &&
+                                  controller.isPhoneVerified.value &&
+                                  !isChanged)
                                 Row(
                                   children: const [
                                     Text(
                                       "Verified",
-                                      style: TextStyle(color: Colors.green, fontWeight: FontWeight.w600),
+                                      style: TextStyle(
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
                                     SizedBox(width: 4),
-                                    Icon(Icons.verified_rounded, color: Colors.green),
+                                    Icon(
+                                      Icons.verified_rounded,
+                                      color: Colors.green,
+                                    ),
                                   ],
                                 ),
                             ],
                           );
                         }),
-
 
                         SizedBox(height: 4),
                         CommonTextField.phone(
@@ -240,7 +256,9 @@ class _AddVisitorScreenState extends State<AddVisitorScreen> {
                                   text: "Send OTP",
                                   padding: EdgeInsets.zero,
                                   isLoading: controller.isOTPLoading.value,
-                                  isDisabled: !controller.isPhoneValid.value || controller.isPhoneVerified.value,
+                                  isDisabled:
+                                      !controller.isPhoneValid.value ||
+                                      controller.isPhoneVerified.value,
                                   onPressed: () async {
                                     controller.otpController.clear();
                                     if (controller.isOTPLoading.value) return;
@@ -268,7 +286,7 @@ class _AddVisitorScreenState extends State<AddVisitorScreen> {
                             if (controller.phoneNumberController.text !=
                                 controller.getPhoneNumberDB.value) {
                               controller.isPhoneVerified.value = false;
-                            }else{
+                            } else {
                               controller.isPhoneVerified.value = true;
                             }
                           },
@@ -422,7 +440,6 @@ class _AddVisitorScreenState extends State<AddVisitorScreen> {
                           // },
                         ),
 
-
                         SizedBox(height: 2),
                         FilePreviewWidget(
                           filePath: controller.businessFilePath,
@@ -493,33 +510,39 @@ class _AddVisitorScreenState extends State<AddVisitorScreen> {
                 Column(
                   children: [
                     if (controller.showSaveButton.value) SizedBox(height: 20),
-                    SafeArea (
+                    SafeArea(
                       child: Obx(() {
                         final shouldShow = controller.showSaveButton.value;
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: AnimatedSwitcher(
                             duration: Duration(milliseconds: 300),
-                            transitionBuilder: (child, animation) => FadeTransition(opacity: animation, child: child),
-                            child: shouldShow
-                                ? CommonButton(
-                              key: ValueKey("saveButton"),
-                              text: "Save",
-                              isLoading: controller.isLoading.value || controller.isUploadLoading.value,
-                              onPressed: () {
-                                controller.saveVisitor();
-                              },
-                            )
-                                : SizedBox.shrink(
-                              key: ValueKey("emptySpace"),
-                            ),
+                            transitionBuilder:
+                                (child, animation) => FadeTransition(
+                                  opacity: animation,
+                                  child: child,
+                                ),
+                            child:
+                                shouldShow
+                                    ? CommonButton(
+                                      key: ValueKey("saveButton"),
+                                      text: "Save",
+                                      isLoading:
+                                          controller.isLoading.value ||
+                                          controller.isUploadLoading.value,
+                                      onPressed: () {
+                                        controller.saveVisitor();
+                                      },
+                                    )
+                                    : SizedBox.shrink(
+                                      key: ValueKey("emptySpace"),
+                                    ),
                           ),
                         );
                       }),
                     ),
                   ],
                 ),
-
               ],
             ),
           ),

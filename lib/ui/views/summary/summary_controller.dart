@@ -1,9 +1,4 @@
-import 'dart:convert';
-import 'dart:ui';
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:tjw1/core/model/tjw/payment_summary_response.dart';
 import 'package:tjw1/services/api_base_service.dart';
 import 'package:tjw1/services/request_method.dart';
@@ -126,7 +121,7 @@ class SummaryController extends GetxController {
       /// 🔹 USE EXISTING CONTROLLER (VERY IMPORTANT)
       final paymentController = Get.find<PaymentController>();
 
-      paymentController.startPayment(orderId: orderId, orderToken: orderToken);
+      paymentController.startPayment(orderId: orderId, orderToken: orderToken,eventId: eventId,);
 
       return decoded;
     } catch (e) {

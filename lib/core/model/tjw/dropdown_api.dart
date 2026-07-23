@@ -11,15 +11,15 @@ class DropdownApi {
     if (json['data'] != null) {
       data = <DropDownData>[];
       json['data'].forEach((v) {
-        data!.add(new DropDownData.fromJson(v));
+        data!.add(DropDownData.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -37,15 +37,16 @@ class DropDownData {
   String? city;
   String? eventLogoURL;
 
-  DropDownData(
-      {this.eventID,
-        this.eventMasterID,
-        this.eventName,
-        this.date,
-        this.venue,
-        this.eventShortName,
-        this.city,
-        this.eventLogoURL});
+  DropDownData({
+    this.eventID,
+    this.eventMasterID,
+    this.eventName,
+    this.date,
+    this.venue,
+    this.eventShortName,
+    this.city,
+    this.eventLogoURL,
+  });
 
   DropDownData.fromJson(Map<String, dynamic> json) {
     eventID = json['eventID'];
@@ -59,15 +60,15 @@ class DropDownData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['eventID'] = this.eventID;
-    data['eventMasterID'] = this.eventMasterID;
-    data['eventName'] = this.eventName;
-    data['date'] = this.date;
-    data['venue'] = this.venue;
-    data['city'] = this.city;
-    data['eventLogoURL'] = this.eventLogoURL;
-    data['eventShortName'] = this.eventShortName;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['eventID'] = eventID;
+    data['eventMasterID'] = eventMasterID;
+    data['eventName'] = eventName;
+    data['date'] = date;
+    data['venue'] = venue;
+    data['city'] = city;
+    data['eventLogoURL'] = eventLogoURL;
+    data['eventShortName'] = eventShortName;
     return data;
   }
 }

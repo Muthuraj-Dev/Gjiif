@@ -60,7 +60,7 @@ class CommonButton extends StatelessWidget {
     this.height = 50.0,
     this.elevation = 0.0,
     this.padding = const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-    this.borderRadius = const BorderRadius.all(Radius.circular(6)),
+    this.borderRadius = const BorderRadius.all(Radius.circular(10)),
     this.textStyle,
     this.prefixIcon,
     this.suffixIcon,
