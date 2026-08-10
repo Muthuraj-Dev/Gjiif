@@ -1,7 +1,13 @@
+import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:tjw1/ui/views/gst/gst_screen.dart';
+
+import '../../../services/api_base_service.dart';
+import '../../../services/request_method.dart';
+import '../../../services/secure_storage_service.dart';
 
 class SettingController extends GetxController {
-
   final String termsContent = '''
 TERMS & CONDITIONS
 
@@ -115,5 +121,53 @@ REFUND & CANCELLATION POLICY
 • We are working to implement a self-service account deletion feature in a future update.
 ''';
 
+  String? gstNumber;
+  var isLoading = false.obs;
 
+  @override
+  void onInit() {
+    _loadGstFromStorage();
+    super.onInit();
+  }
+
+  Future<void> _loadGstFromStorage() async {
+    gstNumber = await SecureStorageService().read("gst");
+  }
+
+  Future<void> deleteAccount() async {
+    try {
+      isLoading(true);
+
+      final response = await ApiBaseService.request<Map<String, dynamic>>(
+        'VisitorDetail/DeleteAccount?GSTN=$gstNumber&AppID=1',
+        method: RequestMethod.GET,
+        authenticated: false,
+      );
+
+      if (response['status'] == "200") {
+        Fluttertoast.showToast(
+          msg: response['message'] ?? 'Account deleted successfully',
+        );
+
+        // Optional: Clear stored data
+        await SecureStorageService().delete("gst");
+
+        // Navigate to login/splash screen
+        Get.offAll(() => GstScreen());
+      } else {
+        Get.snackbar(
+          "Error",
+          response['message'] ?? "Failed to delete account",
+        );
+      }
+    } catch (e) {
+      debugPrint("Delete Account Error: $e");
+      Get.snackbar(
+        "Error",
+        "Something went wrong",
+      );
+    } finally {
+      isLoading(false);
+    }
+  }
 }

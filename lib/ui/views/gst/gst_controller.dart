@@ -27,7 +27,7 @@ class GstController extends GetxController {
 
       // Get raw response as a Map
       final Map<String, dynamic> json = await ApiBaseService.request<Map<String, dynamic>>(
-        'CompanyDetails/VerifyGSTN?sGSTN=${gstController.text}',
+        'CompanyDetails/VerifyGSTN?sGSTN=${gstController.text}&appId=1',
         method: RequestMethod.GET,
         authenticated: false,
       );
@@ -36,7 +36,10 @@ class GstController extends GetxController {
         final response = SelectPrimaryNumber.fromJson(json);
         final status = response.status;
 
-
+        if (status == "0") {
+          Fluttertoast.showToast(msg: response.message ?? "");
+          return;
+        }
 
         if (status == "100") {
           await SecureStorageService().write("gst", gstController.text);

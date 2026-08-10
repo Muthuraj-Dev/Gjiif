@@ -37,12 +37,16 @@ class RegisteredVisitorBadgeList {
   String? registrationID;
   String? visitorPhone;
   String? photoURL;
+  String? statusCode;
+  String? status;
 
   RegisteredVisitorBadgeList({
     this.visitorName,
     this.registrationID,
     this.visitorPhone,
     this.photoURL,
+    this.status,
+    this.statusCode,
   });
 
   RegisteredVisitorBadgeList.fromJson(Map<String, dynamic> json) {
@@ -50,6 +54,8 @@ class RegisteredVisitorBadgeList {
     registrationID = json['registrationID'];
     visitorPhone = json['visitorPhone'];
     photoURL = json['photoURL'];
+    statusCode = json['statusCode'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -58,6 +64,8 @@ class RegisteredVisitorBadgeList {
     data['registrationID'] = registrationID;
     data['visitorPhone'] = visitorPhone;
     data['photoURL'] = photoURL;
+    data['statusCode'] = statusCode;
+    data['status'] = status;
     return data;
   }
 }

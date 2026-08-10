@@ -9,6 +9,7 @@ import 'package:tjw1/common_widget/common_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common_widget/tap_outside_unfocus.dart';
+import '../../../common_widget/webview.dart';
 import '../../../core/res/colors.dart';
 import '../event_detail/event_detail_screen.dart';
 import '../select_visitor/select_visitor_screen.dart';
@@ -269,6 +270,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                           SizedBox(height: 12),
                                           Row(
                                             children: [
+                                              // Expanded(
+                                              //   child: CommonButton.outline(
+                                              //     prefixIcon: Icon(
+                                              //       Icons.messenger_outline,
+                                              //       color: AppColor.primary,
+                                              //     ),
+                                              //     text: "Stall Enquiry",
+                                              //     onPressed: () async {
+                                              //       final Uri url = Uri.parse(event.stallUrl ?? "");
+                                              //
+                                              //       if (await canLaunchUrl(url)) {
+                                              //         await launchUrl(
+                                              //           url,
+                                              //           mode: LaunchMode.inAppWebView,
+                                              //         );
+                                              //       } else {
+                                              //         debugPrint('Could not launch $url');
+                                              //       }
+                                              //     },
+                                              //   ),
+                                              // ),
+
                                               Expanded(
                                                 child: CommonButton.outline(
                                                   prefixIcon: Icon(
@@ -276,25 +299,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     color: AppColor.primary,
                                                   ),
                                                   text: "Stall Enquiry",
-                                                  onPressed: () async {
-                                                    final Uri url = Uri.parse(
-                                                      "${event.stallUrl}",
-                                                    );
+                                                  onPressed: () {
+                                                    if (event.stallUrl == null || event.stallUrl!.isEmpty) return;
 
-                                                    if (await canLaunchUrl(
-                                                      url,
-                                                    )) {
-                                                      await launchUrl(
-                                                        url,
-                                                        mode:
-                                                            LaunchMode
-                                                                .externalApplication, // Opens in browser
-                                                      );
-                                                    } else {
-                                                      debugPrint(
-                                                        'Could not launch $url',
-                                                      );
-                                                    }
+                                                    Get.to(
+                                                          () => CommonWebViewScreen(
+                                                        title: "Stall Enquiry",
+                                                        url: event.stallUrl!,
+                                                      ),
+                                                    );
                                                   },
                                                 ),
                                               ),

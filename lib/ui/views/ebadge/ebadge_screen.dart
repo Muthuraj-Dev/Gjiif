@@ -424,7 +424,14 @@ class _EbadgeScreenState extends State<EbadgeScreen> {
           "Mobile: ${data.visitorPhone ?? '-'}",
           style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
         ),
-        const SizedBox(height: 8),
+        // const SizedBox(height: 8),
+
+        Text(
+          "Status: ${data.status ?? '-'}",
+          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+        ),
+
+        if(data.statusCode == "3" || data.statusCode == "6")
         CommonButton(
           text: "View Badge",
           onPressed: () => controller.viewBadge(context, data.registrationID),

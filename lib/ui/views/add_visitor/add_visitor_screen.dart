@@ -20,8 +20,17 @@ class AddVisitorScreen extends StatefulWidget {
   State<AddVisitorScreen> createState() => _AddVisitorScreenState();
 }
 
+
+
 class _AddVisitorScreenState extends State<AddVisitorScreen> {
-  final AddVisitorController controller = Get.find<AddVisitorController>();
+
+  late final AddVisitorController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(AddVisitorController());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -422,22 +431,6 @@ class _AddVisitorScreenState extends State<AddVisitorScreen> {
                           isLoading: controller.isUploadLoading,
                           uploadingKey: controller.uploadingFileKey,
                           onPick: controller.handleFileUpload,
-                          // onPick: (ctx, key) {
-                          //   UploadUtils.showUploadOptions(
-                          //     context: ctx,
-                          //     fileType: key,
-                          //     gstNumber: controller.gstNumber!,
-                          //     mobileNumber: controller.phoneNumberController.text,
-                          //     isUploadLoading: controller.isUploadLoading,
-                          //     uploadingKey: controller.uploadingFileKey,
-                          //     onSuccess: (uploadedFileName, uploadedFileUrl) {
-                          //       controller.businessFileName.value = uploadedFileName;
-                          //       controller.businessFilePath.value = uploadedFileUrl;
-                          //       controller.businessError.value = '';
-                          //       controller.isBusinessCardUploadedNow = true;
-                          //     },
-                          //   );
-                          // },
                         ),
 
                         SizedBox(height: 2),
@@ -541,8 +534,10 @@ class _AddVisitorScreenState extends State<AddVisitorScreen> {
                         );
                       }),
                     ),
+                    SizedBox(height: 28,),
                   ],
                 ),
+
               ],
             ),
           ),

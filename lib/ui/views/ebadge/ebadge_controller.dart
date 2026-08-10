@@ -89,30 +89,6 @@ class EbadgeController extends GetxController {
   RxList<RegisteredVisitorBadgeList> registeredList =
       <RegisteredVisitorBadgeList>[].obs;
 
-  // Future<void> registeredBadgeList() async {
-  //   registeredList.clear();
-  //   isLoading(true);
-  //   try {
-  //     RegisteredBadgeResponse
-  //     response = await ApiBaseService.request<RegisteredBadgeResponse>(
-  //       'VisitorDetail/GetAllRegisteredVisitorsList?GSTNumber=$gstNumber&EventID=$selectedEventId',
-  //       method: RequestMethod.GET,
-  //       authenticated: false,
-  //     );
-  //
-  //     if (response.status == "200") {
-  //       print("✅ Visitor list fetched successfully.");
-  //       registeredList.assignAll(response.registeredVisitorBadgeList ?? []);
-  //     } else {
-  //       print("❌ Server responded with error");
-  //     }
-  //   } catch (e) {
-  //     print("❌ Error fetching visitor list: $e");
-  //   } finally {
-  //     isLoading(false); // ✅ fix: set to false instead of true
-  //   }
-  // }
-
   Future<void> registeredBadgeList() async {
     if (gstNumber == null || selectedEventId == null) {
       debugPrint("⛔ Skipping API: missing GST or EventID");

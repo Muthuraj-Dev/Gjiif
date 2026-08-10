@@ -96,10 +96,14 @@ class AddVisitorController extends GetxController {
   final ScrollController scrollController = ScrollController();
   final RxBool showSaveButton = false.obs;
 
+  AddVisitorController() {
+    print("Constructor called");
+  }
+
   @override
   void onInit() {
-    print("ADD VISITOR SCREEN");
     super.onInit();
+    print("ADD VISITOR SCREEN");
     _loadGstFromStorage();
 
     scrollController.addListener(_scrollListener);
@@ -139,6 +143,7 @@ class AddVisitorController extends GetxController {
   }
 
   Future<void> _loadGstFromStorage() async {
+    print("Loading local storage");
     gstNumber = await SecureStorageService().read("gst");
     mobileNumber = await SecureStorageService().read("mobileNumber");
     visitorId = await SecureStorageService().read("visitorID");
@@ -212,7 +217,6 @@ class AddVisitorController extends GetxController {
       isLoading(false);
     }
 
-    // Get.to(() => SelectVisitorScreen());
   }
 
   Future<bool> requestStoragePermission() async {
@@ -555,6 +559,7 @@ class AddVisitorController extends GetxController {
 
   void handleFileUpload(BuildContext context, String fileKey) {
     print("FileKey received: $fileKey");
+    print("GST FROM LOCAL  $gstNumber");
     final onSuccess = getUploadHandler(fileKey);
 
     if (onSuccess != null) {

@@ -275,6 +275,7 @@ class VisitorController extends GetxController {
       if (response['status'] == "200") {
         Fluttertoast.showToast(msg: "${response['message']}");
         fetchVisitorList();
+        // clearForm();
       }
     } catch (e) {
       print('Error: $e');
@@ -610,6 +611,33 @@ class VisitorController extends GetxController {
       ),
     );
   }
+
+  // void clearForm() {
+  //   nameController.clear();
+  //   phoneNumberController.clear();
+  //   emailController.clear();
+  //   genderController.clear();
+  //   idTypeController.clear();
+  //   idNumberController.clear();
+  //
+  //   designationID.value = "";
+  //   isPhoneVerified.value = false;
+  //
+  //   idProofName.value = "";
+  //   businessFileName.value = "";
+  //   passportPhotoName.value = "";
+  //
+  //   isIDProofUploadedNow = false;
+  //   isBusinessCardUploadedNow = false;
+  //   isPhotoUploadedNow = false;
+  //
+  //   // Clear any image/file variables as well
+  //   idProofFile = null;
+  //   businessCardFile = null;
+  //   passportPhotoFile = null;
+  //
+  //   addFormKey.currentState?.reset();
+  // }
 
   /////////////////////////////////////////////////
 }

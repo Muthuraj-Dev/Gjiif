@@ -8,6 +8,6 @@ class AppBinding extends Bindings {
   void dependencies() {
     Get.put(MasterDataController(), permanent: true);
     Get.put(HomeController());
-    Get.put<AddVisitorController>(AddVisitorController(), permanent: false);
+    // Get.put<AddVisitorController>(AddVisitorController(), permanent: false);
   }
 }

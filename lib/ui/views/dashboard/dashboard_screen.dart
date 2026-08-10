@@ -77,27 +77,28 @@ class DashboardScreen extends StatelessWidget {
       body: Obx(() {
         return _widgetOptions.elementAt(controller.selectedIndex.value);
       }),
-      floatingActionButton: SafeArea(
-        child: GestureDetector(
-          onTap: () {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              builder: (_) => DashboardBottomSheet(
+      floatingActionButton: GestureDetector(
+        onTap: () {
+          showModalBottomSheet(
+            useSafeArea: true,
+            context: context,
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            builder: (_) => SafeArea (
+              child: DashboardBottomSheet(
                 events: homeController.eventList,
               ),
-            );
-          },
-          child: Container(
-            width: 72,
-            height: 72,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10)],
             ),
-            child: ClipOval(child: Image.asset("assets/gjiif.gif")),
+          );
+        },
+        child: Container(
+          width: 72,
+          height: 72,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10)],
           ),
+          child: ClipOval(child: Image.asset("assets/gjiif.gif")),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -314,99 +315,6 @@ class DashboardBottomSheet extends StatelessWidget {
                     ),
                   ),
 
-                  // Container(
-                  //   decoration: BoxDecoration(
-                  //     color: AppColor.white,
-                  //     borderRadius: BorderRadius.circular(12),
-                  //     border: Border.all(
-                  //       color: AppColor.primary,
-                  //     ),
-                  //     boxShadow: [
-                  //       BoxShadow(
-                  //         color: Colors.black.withOpacity(0.1),
-                  //         blurRadius: 1,
-                  //         offset: const Offset(-2, 0),
-                  //       ),
-                  //       BoxShadow(
-                  //         color: Colors.white.withOpacity(0.2),
-                  //         blurRadius: 1,
-                  //         offset: const Offset(-2, 2),
-                  //       ),
-                  //     ],
-                  //   ),
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.all(15),
-                  //     child: Row(
-                  //       children: [
-                  //         Column(
-                  //           children: [
-                  //             Text(
-                  //               controller.getMonth(event.date),
-                  //               style: TextStyle(
-                  //                 fontSize: 12,
-                  //                 fontWeight: FontWeight.w500,
-                  //                 color: AppColor.primary,
-                  //               ),
-                  //             ),
-                  //             Text(
-                  //               controller.getDay(event.date),
-                  //               style: const TextStyle(
-                  //                 fontSize: 24,
-                  //                 fontWeight: FontWeight.w500,
-                  //               ),
-                  //             ),
-                  //             Text(
-                  //               controller.getYear(event.date),
-                  //               style: const TextStyle(
-                  //                 fontSize: 12,
-                  //                 fontWeight: FontWeight.w500,
-                  //                 color: Color(0xff5C5C5C),
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //         const SizedBox(width: 10),
-                  //         const SizedBox(
-                  //           height: 80,
-                  //           child: VerticalDivider(),
-                  //         ),
-                  //         const SizedBox(width: 10),
-                  //         Expanded(
-                  //           child: Column(
-                  //             crossAxisAlignment:
-                  //             CrossAxisAlignment.start,
-                  //             children: [
-                  //               Text(
-                  //                 event.eventName ?? '',
-                  //                 style: const TextStyle(
-                  //                   fontSize: 16,
-                  //                   fontWeight: FontWeight.w500,
-                  //                 ),
-                  //               ),
-                  //               const SizedBox(height: 8),
-                  //               Row(
-                  //                 children: [
-                  //                   const Icon(
-                  //                     Icons.location_on_outlined,
-                  //                     size: 20,
-                  //                   ),
-                  //                   const SizedBox(width: 4),
-                  //                   Expanded(
-                  //                     child: Text(
-                  //                       event.venue ?? '',
-                  //                       overflow:
-                  //                       TextOverflow.ellipsis,
-                  //                     ),
-                  //                   ),
-                  //                 ],
-                  //               ),
-                  //             ],
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
                 ),
               );
             },

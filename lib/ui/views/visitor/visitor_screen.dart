@@ -45,9 +45,6 @@ class _VisitorScreenState extends State<VisitorScreen>
         if (controller.visitorListData.isEmpty && !controller.isLoading.value) {
           return AddVisitorScreen(isDashboardForm: true);
         }
-        // else {
-        //   return VisitorListScreen(controller: controller);
-        // }
         return RefreshIndicator(
           onRefresh: controller.refreshVisitorList,
           child: VisitorListScreen(controller: controller),
@@ -87,12 +84,6 @@ class VisitorListScreen extends StatelessWidget {
                   text: "+ Add Employee",
                   padding: EdgeInsets.zero,
                   onPressed: () async {
-                    print("GGGG");
-                    // final result = await Get.to(
-                    //   () => AddVisitorScreen(),
-                    //   arguments: {'isFromEdit': false, 'visitorID': 0},
-                    // );
-
                     final result = await Get.to(
                       () => AddVisitorScreen(),
                       arguments: {'isFromEdit': false, 'visitorID': 0},
