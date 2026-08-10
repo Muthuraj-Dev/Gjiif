@@ -16,9 +16,11 @@ import '../../../core/res/colors.dart';
 import '../../../services/api_base_service.dart';
 import '../../../services/request_method.dart';
 import '../../../services/secure_storage_service.dart';
+import '../visitor/visitor_controller.dart';
 
 class AddVisitorController extends GetxController {
   final addFormKey = GlobalKey<FormState>();
+  final VisitorController? visitorController;
 
   final TextEditingController genderController = TextEditingController();
   final FocusNode genderFocusNode = FocusNode();
@@ -96,9 +98,10 @@ class AddVisitorController extends GetxController {
   final ScrollController scrollController = ScrollController();
   final RxBool showSaveButton = false.obs;
 
-  AddVisitorController() {
-    print("Constructor called");
-  }
+  AddVisitorController({
+    this.visitorController,
+  });
+
 
   @override
   void onInit() {
@@ -209,6 +212,7 @@ class AddVisitorController extends GetxController {
       if (response['status'] == "200") {
         Fluttertoast.showToast(msg: "${response['message']}");
         Get.back(result: 'refresh');
+        await visitorController?.refreshVisitorList();
       }
     } catch (e) {
       print('Error: $e');

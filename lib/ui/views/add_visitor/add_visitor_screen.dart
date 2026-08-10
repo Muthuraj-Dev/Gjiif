@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tjw1/ui/views/add_visitor/add_visitor_controller.dart';
+import 'package:tjw1/ui/views/visitor/visitor_controller.dart';
 import 'package:tjw1/ui/widgets/common_file_picker_box.dart';
 
 import '../../../common_widget/common_button.dart';
@@ -13,8 +14,14 @@ import '../../../core/res/colors.dart';
 import '../../widgets/file_preview_widget.dart';
 
 class AddVisitorScreen extends StatefulWidget {
-  bool? isDashboardForm;
-  AddVisitorScreen({this.isDashboardForm, super.key});
+  final bool? isDashboardForm;
+  final VisitorController? controller;
+
+  const AddVisitorScreen({
+    super.key,
+    this.isDashboardForm,
+    this.controller,
+  });
 
   @override
   State<AddVisitorScreen> createState() => _AddVisitorScreenState();
@@ -29,7 +36,19 @@ class _AddVisitorScreenState extends State<AddVisitorScreen> {
   @override
   void initState() {
     super.initState();
-    controller = Get.put(AddVisitorController());
+
+    // Get.put() reuses an already-registered instance instead of replacing
+    // it, so without this, reopening this screen (e.g. after the previous
+    // visitor was deleted) would show stale data from the earlier session.
+    if (Get.isRegistered<AddVisitorController>()) {
+      Get.delete<AddVisitorController>();
+    }
+
+    controller = Get.put(
+      AddVisitorController(
+        visitorController: widget.controller,
+      ),
+    );
   }
 
   @override

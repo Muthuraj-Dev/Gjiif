@@ -148,6 +148,11 @@ class VisitorController extends GetxController {
         if (visitorListData.isEmpty) {
           // list is empty means - it is primary member
         }
+      } else {
+        // No visitors returned for this GST (e.g. after deleting the last
+        // remaining visitor) - clear any stale data so the UI correctly
+        // falls back to the Add Visitor screen instead of showing removed records.
+        visitorListData.clear();
       }
     } catch (e) {
       print('Error fetching state list: $e');

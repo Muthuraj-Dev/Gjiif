@@ -164,14 +164,6 @@ class _SelectVisitorScreenState extends State<SelectVisitorScreen> {
                       text: "+ Add Employee",
 
                       onPressed: () {
-                        // Get.to(
-                        //   () => AddVisitorScreen(),
-                        //   arguments: {'isFromEdit': false, 'visitorID': 0},
-                        // )?.then((_) {
-                        //   print("BACKED");
-                        //   controller.fetchRegisteredVisitorList();
-                        // });
-
                         Get.to(
                           () => AddVisitorScreen(),
                           binding: AddVisitorBinding(), // 🔥 THIS IS KEY

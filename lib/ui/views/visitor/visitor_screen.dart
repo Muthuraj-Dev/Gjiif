@@ -43,8 +43,13 @@ class _VisitorScreenState extends State<VisitorScreen>
           return const Center(child: CircularProgressIndicator());
         }
         if (controller.visitorListData.isEmpty && !controller.isLoading.value) {
-          return AddVisitorScreen(isDashboardForm: true);
+      //    return AddVisitorScreen(isDashboardForm: true);
+          return AddVisitorScreen(
+            isDashboardForm: true,
+            controller: controller,
+          );
         }
+
         return RefreshIndicator(
           onRefresh: controller.refreshVisitorList,
           child: VisitorListScreen(controller: controller),
