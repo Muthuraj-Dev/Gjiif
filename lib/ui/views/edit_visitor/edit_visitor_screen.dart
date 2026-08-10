@@ -20,7 +20,19 @@ class EditVisitorScreen extends StatefulWidget {
 }
 
 class _EditVisitorScreenState extends State<EditVisitorScreen> {
-  final EditVisitorController controller = Get.put(EditVisitorController());
+  late final EditVisitorController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    // Get.put() reuses an already-registered instance instead of replacing
+    // it, so without this, reopening this screen for a different visitor
+    // would show stale data from the previously edited visitor.
+    if (Get.isRegistered<EditVisitorController>()) {
+      Get.delete<EditVisitorController>();
+    }
+    controller = Get.put(EditVisitorController());
+  }
 
   @override
   Widget build(BuildContext context) {

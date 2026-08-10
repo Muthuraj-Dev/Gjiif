@@ -17,7 +17,19 @@ class EventDetailScreen extends StatefulWidget {
 }
 
 class _EventDetailScreenState extends State<EventDetailScreen> {
-  final EventDetailController controller = Get.put(EventDetailController());
+  late final EventDetailController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    // Get.put() reuses an already-registered instance instead of replacing
+    // it, so without this, opening a different event's details would keep
+    // showing the previously viewed event's data.
+    if (Get.isRegistered<EventDetailController>()) {
+      Get.delete<EventDetailController>();
+    }
+    controller = Get.put(EventDetailController());
+  }
 
   @override
   Widget build(BuildContext context) {

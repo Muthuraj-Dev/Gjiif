@@ -18,7 +18,19 @@ class SelectVisitorScreen extends StatefulWidget {
 }
 
 class _SelectVisitorScreenState extends State<SelectVisitorScreen> {
-  final SelectVisitorController controller = Get.put(SelectVisitorController());
+  late final SelectVisitorController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    // Get.put() reuses an already-registered instance instead of replacing
+    // it, so without this, reopening this screen for a different event
+    // would keep the previous event's visitor list/selection.
+    if (Get.isRegistered<SelectVisitorController>()) {
+      Get.delete<SelectVisitorController>();
+    }
+    controller = Get.put(SelectVisitorController());
+  }
 
   @override
   Widget build(BuildContext context) {

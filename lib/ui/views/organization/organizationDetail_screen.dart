@@ -348,9 +348,17 @@ import 'organizationDetail_controller.dart';
 class OrganizationDetailScreen extends StatelessWidget {
   OrganizationDetailScreen({super.key});
 
-  final OrganizationDetailController controller = Get.put(
-    OrganizationDetailController(),
-  );
+  final OrganizationDetailController controller = _freshController();
+
+  // Get.put() reuses an already-registered instance instead of replacing
+  // it, so without this, reopening this screen would show stale data from
+  // the previous session instead of the current status/company details.
+  static OrganizationDetailController _freshController() {
+    if (Get.isRegistered<OrganizationDetailController>()) {
+      Get.delete<OrganizationDetailController>();
+    }
+    return Get.put(OrganizationDetailController());
+  }
 
   @override
   Widget build(BuildContext context) {

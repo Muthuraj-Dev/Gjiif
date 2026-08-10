@@ -15,7 +15,19 @@ class EbadgeMemberScreen extends StatefulWidget {
 }
 
 class _EbadgeMemberScreenState extends State<EbadgeMemberScreen> {
-  final EbadgeMemberController controller = Get.put(EbadgeMemberController());
+  late final EbadgeMemberController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    // Get.put() reuses an already-registered instance instead of replacing
+    // it, so without this, reopening this screen for a different visitor
+    // would show the previously viewed visitor's badge data.
+    if (Get.isRegistered<EbadgeMemberController>()) {
+      Get.delete<EbadgeMemberController>();
+    }
+    controller = Get.put(EbadgeMemberController());
+  }
 
   @override
   Widget build(BuildContext context) {

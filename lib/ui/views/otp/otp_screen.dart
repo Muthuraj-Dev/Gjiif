@@ -24,6 +24,12 @@ class _OtpScreenState extends State<OtpScreen> {
 
   @override
   void initState() {
+    // Get.put() reuses an already-registered instance instead of replacing
+    // it, so without this, resending/retrying OTP for a different mobile
+    // number would keep showing the previous session's OTP state.
+    if (Get.isRegistered<OtpController>()) {
+      Get.delete<OtpController>();
+    }
     controller = Get.put(OtpController(widget.isNewPrimaryNumber));
     super.initState();
   }

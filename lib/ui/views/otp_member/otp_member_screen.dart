@@ -17,7 +17,19 @@ class OtpMemberScreen extends StatefulWidget {
 }
 
 class _OtpMemberScreenState extends State<OtpMemberScreen> {
-  final OtpMemberController controller = Get.put(OtpMemberController());
+  late final OtpMemberController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    // Get.put() reuses an already-registered instance instead of replacing
+    // it, so without this, retrying this screen would keep the previous
+    // session's OTP state.
+    if (Get.isRegistered<OtpMemberController>()) {
+      Get.delete<OtpMemberController>();
+    }
+    controller = Get.put(OtpMemberController());
+  }
 
   @override
   Widget build(BuildContext context) {

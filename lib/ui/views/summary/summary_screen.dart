@@ -13,7 +13,19 @@ class SummaryScreen extends StatefulWidget {
 }
 
 class _SummaryScreenState extends State<SummaryScreen> {
-  final SummaryController controller = Get.put(SummaryController());
+  late final SummaryController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    // Get.put() reuses an already-registered instance instead of replacing
+    // it, so without this, reopening this screen for a different selection
+    // would show the previous session's summary data.
+    if (Get.isRegistered<SummaryController>()) {
+      Get.delete<SummaryController>();
+    }
+    controller = Get.put(SummaryController());
+  }
 
   @override
   Widget build(BuildContext context) {

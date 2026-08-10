@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
+import 'package:tjw1/controllers/master_data_controller.dart';
 import 'package:tjw1/core/model/tjw/designation_response.dart';
 import 'package:tjw1/core/model/tjw/visitor_list_response.dart';
 import 'package:tjw1/services/api_base_service.dart';
@@ -82,9 +83,21 @@ class VisitorController extends GetxController {
   String? mobileNumber;
   String? visitorId;
 
+  late MasterDataController masterData;
+  RxList<DesignationData> designationList = <DesignationData>[].obs;
+
   @override
   void onInit() {
     super.onInit();
+
+    // Reuse designations already fetched once at app start instead of
+    // making a duplicate SQ/GetDesignationList call here.
+    masterData = Get.find<MasterDataController>();
+    designationList.assignAll(masterData.designations);
+    ever(masterData.designations, (_) {
+      designationList.assignAll(masterData.designations);
+    });
+
     loadGstFromStorage();
   }
 
@@ -94,34 +107,10 @@ class VisitorController extends GetxController {
     mobileNumber = await SecureStorageService().read("mobileNumber");
     visitorId = await SecureStorageService().read("visitorID");
     designationID.value = "0";
-    if (designationList.isEmpty) {
-      fetchDesignation();
-    }
     if (gstNumber?.isNotEmpty == true) {
       await fetchVisitorList();
     }
     phoneNumberController.text = mobileNumber!;
-  }
-
-  RxList<DesignationData> designationList = <DesignationData>[].obs;
-
-  Future<void> fetchDesignation() async {
-    try {
-      isLoading(true);
-      DesignationResponse response =
-          await ApiBaseService.request<DesignationResponse>(
-            'SQ/GetDesignationList',
-            method: RequestMethod.GET,
-            authenticated: false,
-          );
-      if (response.response?.status == "200") {
-        designationList.assignAll(response.data!);
-      }
-    } catch (e) {
-      print('Error fetching state list: $e');
-    } finally {
-      isLoading(false);
-    }
   }
 
   var visitorListData = <VisitorListData>[].obs;
