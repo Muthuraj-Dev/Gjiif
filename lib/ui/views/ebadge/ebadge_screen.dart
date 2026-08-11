@@ -241,23 +241,27 @@ class _EbadgeScreenState extends State<EbadgeScreen> {
       body: Obx(() {
         return SafeArea(
           child: TapOutsideUnFocus(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildHeader(),
-                  const SizedBox(height: 16),
+            child: RefreshIndicator(
+              onRefresh: controller.registeredBadgeList,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildHeader(),
+                    const SizedBox(height: 16),
 
-                  // _buildBadgeList(),
-                  if (controller.isLoading.value)
-                    const Center(child: CircularProgressIndicator())
-                  else if (controller.hasLoadedOnce.value &&
-                      controller.registeredList.isEmpty)
-                    _buildEmptyState()
-                  else
-                    _buildBadgeList(),
-                ],
+                    // _buildBadgeList(),
+                    if (controller.isLoading.value)
+                      const Center(child: CircularProgressIndicator())
+                    else if (controller.hasLoadedOnce.value &&
+                        controller.registeredList.isEmpty)
+                      _buildEmptyState()
+                    else
+                      _buildBadgeList(),
+                  ],
+                ),
               ),
             ),
           ),

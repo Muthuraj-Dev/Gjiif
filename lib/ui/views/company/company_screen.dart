@@ -92,15 +92,22 @@ class _CompanyScreenState extends State<CompanyScreen> {
               children: [
                 Expanded(
                   child: TapOutsideUnFocus(
-                    child: SingleChildScrollView(
-                      controller: controller.scrollController,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 20,
-                      ),
-                      child: Form(
-                        key: controller.formKeyCompany,
-                        child: _buildFormFields(),
+                    child: RefreshIndicator(
+                      onRefresh:
+                          () => controller.fetchCompanyDetail(
+                            controller.visitorId,
+                          ),
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        controller: controller.scrollController,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 20,
+                        ),
+                        child: Form(
+                          key: controller.formKeyCompany,
+                          child: _buildFormFields(),
+                        ),
                       ),
                     ),
                   ),

@@ -32,6 +32,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _onRefresh(BuildContext context) async {
+    // Reload the data actually shown on this screen (banners, upcoming
+    // events, today's rate card) - previously this only refreshed Firebase
+    // Remote Config, which doesn't drive any of that.
+    await controller.fetchBannerEvent();
+    await controller.fetchRateCard();
+
     bool refreshed = await controller.refreshRemoteConfig();
     if (refreshed) {
       ScaffoldMessenger.of(
