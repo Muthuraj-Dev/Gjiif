@@ -134,6 +134,28 @@ REFUND & CANCELLATION POLICY
     gstNumber = await SecureStorageService().read("gst");
   }
 
+  Future<void> logout() async {
+    try {
+      isLoading(true);
+
+      // Clear locally stored session data
+      await SecureStorageService().delete("gst");
+      await SecureStorageService().delete("mobileNumber");
+      await SecureStorageService().delete("visitorID");
+
+      // Navigate to GST screen, clearing the back stack
+      Get.offAll(() => GstScreen());
+    } catch (e) {
+      debugPrint("Logout Error: $e");
+      Get.snackbar(
+        "Error",
+        "Something went wrong",
+      );
+    } finally {
+      isLoading(false);
+    }
+  }
+
   Future<void> deleteAccount() async {
     try {
       isLoading(true);
