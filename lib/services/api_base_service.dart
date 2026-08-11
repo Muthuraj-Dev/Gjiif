@@ -1,19 +1,21 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 
+import '../ui/views/gst/gst_screen.dart';
 import 'json_parsers.dart';
+import 'secure_storage_service.dart';
+import 'token_manager.dart';
 
 class ApiBaseService {
-  static const String baseUrl = 'https://app.gjiif.in/'; // 'https://apptest.gjiif.in/';
+  static const String baseUrl =
+      'https://apptest.gjiif.in/'; // 'https://app.gjiif.in/';
   static final _logger = Logger();
-  static const _storage = FlutterSecureStorage();
   static final http.Client _httpClient = http.Client();
 
   static Future<List<T>> requestList<T>(
@@ -146,7 +148,7 @@ class ApiBaseService {
     Map<String, String> headerParams = {};
     headerParams["Content-Type"] = "application/json";
     if (body is String) {
-  //    headerParams["Content-Type"] = "application/x-www-form-urlencoded";
+      //    headerParams["Content-Type"] = "application/x-www-form-urlencoded";
       headerParams['Content-Type'] = 'application/json';
     } else if (body is Map) {
       headerParams['Accept'] = "application/json";
@@ -156,69 +158,22 @@ class ApiBaseService {
       headerParams["Content-Type"] = "multipart/form-data";
     }
 
-    if (authenticated) {
-      String token = await _getToken(); // Fetch token
+    // Attach the saved auth token whenever one is available, regardless of
+    // the `authenticated` flag, so every request automatically carries it
+    // once the user is logged in. Endpoints called before login (no token
+    // saved yet) are unaffected - the header is simply omitted, exactly as
+    // before. There is no refresh-token API, so an expired token is just
+    // sent as-is - the server's 401 response is what triggers the
+    // session-expired handling in `_handleResponse`.
+    String token = await _getToken();
 
-      if (token.isNotEmpty) {
-        // Check if token is expired (you may need to decode the JWT token to check expiry)
-        bool isExpired = await _isTokenExpired(token);
-
-        if (isExpired) {
-          // Token expired, attempt to refresh it
-          String newToken = await _refreshAccessToken();
-
-          if (newToken.isNotEmpty) {
-            headerParams['Authorization'] = 'Bearer $newToken';
-          } else {
-            throw Exception('Token is expired and refresh failed.');
-          }
-        } else {
-          headerParams['Authorization'] = 'Bearer $token';
-        }
-      } else {
-        throw Exception('Token is not available.');
-      }
+    if (token.isNotEmpty) {
+      headerParams['Authorization'] = 'Bearer $token';
+    } else if (authenticated) {
+      throw Exception('Token is not available.');
     }
 
     return headerParams;
-  }
-
-  static Future<bool> _isTokenExpired(String token) async {
-    try {
-      final jwt = JWT.decode(token);
-      final expiryTime =
-          jwt.payload['exp'] *
-          1000; // Expiry time is usually in seconds, so multiply by 1000 for milliseconds
-      final currentTime = DateTime.now().millisecondsSinceEpoch;
-      return currentTime >
-          expiryTime; // Compare current time with token expiry time
-    } catch (e) {
-      // Handle token decoding errors, like malformed JWT
-      return true; // Return true if decoding fails
-    }
-  }
-
-  static Future<String> _refreshAccessToken() async {
-    // Make a request to the refresh API endpoint with the refresh token
-    String refreshToken = await _getRefreshToken();
-
-    if (refreshToken.isNotEmpty) {
-      final response = await http.post(
-        Uri.parse("http://192.168.1.2:3000/api/refresh-token"),
-        ////////////////////////////////////////////////////////////////////////////////
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'refreshToken': refreshToken}),
-      );
-
-      if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body);
-        return responseData['accessToken']; // Return the new access token
-      } else {
-        throw Exception('Failed to refresh access token.');
-      }
-    } else {
-      throw Exception('No refresh token available.');
-    }
   }
 
   static Future<http.Response?> _handleResponse(http.Response? response) async {
@@ -229,7 +184,7 @@ class ApiBaseService {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return response;
     } else if (response.statusCode == 401) {
-      Fluttertoast.showToast(msg: "Your session has expired");
+      await _handleSessionExpired();
     } else if (response.statusCode >= 400 && response.statusCode < 500) {
       Fluttertoast.showToast(msg: "${jsonDecode(response.body)['message']}");
     } else if (response.statusCode >= 500) {
@@ -238,20 +193,45 @@ class ApiBaseService {
     return null;
   }
 
+  static bool _isHandlingSessionExpiry = false;
+
+  // No refresh-token API exists, so a 401 means the session is over: clear
+  // the stored session and send the user back to the GST screen, same as a
+  // manual Logout. Guarded so concurrent requests only trigger this once.
+  static Future<void> _handleSessionExpired() async {
+    if (_isHandlingSessionExpiry) return;
+    _isHandlingSessionExpiry = true;
+
+    Fluttertoast.showToast(msg: "Your session has expired");
+
+    await TokenManager.deleteToken();
+    await TokenManager.deleteTokenExpiry();
+    await SecureStorageService().delete("gst");
+    await SecureStorageService().delete("mobileNumber");
+    await SecureStorageService().delete("visitorID");
+
+    Get.offAll(() => GstScreen());
+
+    _isHandlingSessionExpiry = false;
+  }
+
   Future<dynamic> uploadImage(
-      File file,
-      String endpoint, {
-        required String fileCategory,
-        required String gstNumber,
-        required String mobileNumber,
-      }) async {
+    File file,
+    String endpoint, {
+    required String fileCategory,
+    required String gstNumber,
+    required String mobileNumber,
+  }) async {
     var uri = Uri.parse(baseUrl + endpoint);
 
-    var request = http.MultipartRequest('POST', uri)
-      ..files.add(await http.MultipartFile.fromPath('uploadedFile', file.path))
-      ..fields['fileCategory'] = fileCategory
-      ..fields['gstNumber'] = gstNumber
-      ..fields['mobileNumber'] = mobileNumber;
+    var request =
+        http.MultipartRequest('POST', uri)
+          ..files.add(
+            await http.MultipartFile.fromPath('uploadedFile', file.path),
+          )
+          ..fields['fileCategory'] = fileCategory
+          ..fields['gstNumber'] = gstNumber
+          ..fields['mobileNumber'] = mobileNumber;
 
     // 🖨️ Print request details
     print('📤 UPLOADING TO: $uri');
@@ -275,16 +255,9 @@ class ApiBaseService {
     throw Exception("Image upload failed");
   }
 
-
-
   // Get Token from Secure Storage
   static Future<String> _getToken() async {
-    return await _storage.read(key: 'auth_token') ?? '';
-  }
-
-  // Get Token from Secure Storage
-  static Future<String> _getRefreshToken() async {
-    return await _storage.read(key: 'refresh_token') ?? '';
+    return await TokenManager.getToken() ?? '';
   }
 }
 

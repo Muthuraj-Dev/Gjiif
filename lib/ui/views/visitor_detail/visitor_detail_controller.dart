@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import 'package:tjw1/common_widget/common_button.dart';
 import 'package:tjw1/common_widget/common_dialog.dart';
+import 'package:tjw1/controllers/master_data_controller.dart';
 import 'package:tjw1/core/model/tjw/designation_response.dart';
 import 'package:tjw1/core/model/tjw/otp_verify.dart';
 import 'package:tjw1/services/api_base_service.dart';
@@ -94,9 +95,13 @@ class VisitorDetailController extends GetxController {
     phoneNumberController.addListener(() {
       isPhoneValid.value = phoneNumberController.text.length == 10;
     });
-    if (designationList.isEmpty) {
-      fetchDesignation();
-    }
+    // Reuse designations already fetched once at app start instead of
+    // making a duplicate SQ/GetDesignationList call here.
+    masterData = Get.find<MasterDataController>();
+    designationList.assignAll(masterData.designations);
+    ever(masterData.designations, (_) {
+      designationList.assignAll(masterData.designations);
+    });
 
     final args = Get.arguments as Map<String, dynamic>;
     isFromEdit = args['isFromEdit'];
@@ -122,7 +127,7 @@ class VisitorDetailController extends GetxController {
           await ApiBaseService.request<Map<String, dynamic>>(
             'VisitorDetail/GetVisitorDetail?visitorId=$currentVisitorId',
             method: RequestMethod.GET,
-            authenticated: false,
+            authenticated: true,
           );
       if (response['status'] == "200") {
         genderController.text =
@@ -178,26 +183,8 @@ class VisitorDetailController extends GetxController {
     visitorId = await SecureStorageService().read("visitorID");
   }
 
+  late MasterDataController masterData;
   RxList<DesignationData> designationList = <DesignationData>[].obs;
-
-  Future<void> fetchDesignation() async {
-    try {
-      isLoading(true);
-      DesignationResponse response =
-          await ApiBaseService.request<DesignationResponse>(
-            'SQ/GetDesignationList',
-            method: RequestMethod.GET,
-            authenticated: false,
-          );
-      if (response.response?.status == "200") {
-        designationList.assignAll(response.data!);
-      }
-    } catch (e) {
-      print('Error fetching state list: $e');
-    } finally {
-      isLoading(false);
-    }
-  }
 
   Future<void> saveVisitor() async {
     if (formKey.currentState?.validate() != true) {

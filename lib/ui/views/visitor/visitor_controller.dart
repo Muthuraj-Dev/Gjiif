@@ -128,7 +128,7 @@ class VisitorController extends GetxController {
           await ApiBaseService.request<VisitorListResponse>(
             'VisitorDetail/GetAllVisitorsList?GSTN=$gstNumber',
             method: RequestMethod.GET,
-            authenticated: false,
+            authenticated: true,
           );
       if (response.status == "200") {
         visitorListData.assignAll(response.visitorListData ?? []);

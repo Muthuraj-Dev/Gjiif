@@ -146,7 +146,7 @@ class EditVisitorController extends GetxController {
           await ApiBaseService.request<Map<String, dynamic>>(
             'VisitorDetail/GetVisitorDetail?visitorId=$currentVisitorId',
             method: RequestMethod.GET,
-            authenticated: false,
+            authenticated: true,
           );
       if (response['status'] == "200") {
         genderController.text =

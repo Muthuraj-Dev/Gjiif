@@ -39,7 +39,7 @@ class MasterDataController extends GetxController {
       FetchCompanyType response = await ApiBaseService.request<FetchCompanyType>(
         'CompanyDetails/GetCompanyType',
         method: RequestMethod.GET,
-        authenticated: false,
+        authenticated: true,
       );
 
       if (response.status == "200" && response.companyTypeData != null) {
@@ -59,7 +59,7 @@ class MasterDataController extends GetxController {
       StateList response = await ApiBaseService.request<StateList>(
         'SQ/GetStateList',
         method: RequestMethod.GET,
-        authenticated: false,
+        authenticated: true,
       );
 
       if (response.response?.status == "200" && response.stateData != null) {

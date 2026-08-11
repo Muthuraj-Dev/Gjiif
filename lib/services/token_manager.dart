@@ -25,6 +25,18 @@ class TokenManager {
     await _storage.delete(key: 'auth_token');
   }
 
+  static Future<String?> getTokenExpiry() async {
+    return await _storage.read(key: 'auth_token_expiry');
+  }
+
+  static Future<void> setTokenExpiry(String expiryDate) async {
+    await _storage.write(key: 'auth_token_expiry', value: expiryDate);
+  }
+
+  static Future<void> deleteTokenExpiry() async {
+    await _storage.delete(key: 'auth_token_expiry');
+  }
+
   static Future<void> deleteRefreshToken() async {
     await _storage.delete(key: 'refresh_token');
   }

@@ -24,12 +24,10 @@ class HomeController extends GetxController {
 
   final config = locator<AppConfigService>().config;
 
-  @override
-  void onInit() {
-    super.onInit();
-    fetchBannerEvent();
-    fetchRateCard();
-  }
+  // Banner/rate-card data now requires an auth token, so it is not fetched
+  // in onInit() (this controller is created pre-login to satisfy
+  // DashboardScreen's Get.find()) - it's kicked off from OtpController
+  // right after OTP verification succeeds instead.
 
   Future<void> fetchBannerEvent() async {
     try {
@@ -38,7 +36,7 @@ class HomeController extends GetxController {
           await ApiBaseService.request<BannerEventResponse>(
             'SQ/GetBannerForHomeScreen',
             method: RequestMethod.GET,
-            authenticated: false,
+            authenticated: true,
           );
 
       if (response.status == "200") {
@@ -105,7 +103,7 @@ class HomeController extends GetxController {
       TodaysRateCard response = await ApiBaseService.request<TodaysRateCard>(
         'SQ/TodaysRateCard',
         method: RequestMethod.GET,
-        authenticated: false,
+        authenticated: true,
       );
 
       if (response.status == "200") {

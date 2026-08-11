@@ -9,6 +9,9 @@ import '../../../controllers/master_data_controller.dart';
 import '../../../locator.dart';
 import '../../../services/appconfig_service.dart';
 import '../../../services/network_service.dart';
+import '../../../services/token_manager.dart';
+import '../dashboard/dashboard_screen.dart';
+import '../home/home_controller.dart';
 import '../payment/payment_controller.dart';
 import '../terms/terms_screen.dart';
 
@@ -57,16 +60,27 @@ class SplashController extends GetxController {
       await _loadRemoteConfig();
 
       // 2️⃣ NOW config is available → create PaymentController
-      Get.put(MasterDataController(), permanent: true);
+      final masterData = Get.put(MasterDataController(), permanent: true);
       Get.put(PaymentController(), permanent: true);
 
       await _initServices();
 
       debugPrint("✅ App init success");
 
-      Get.offAll(() => TermsScreen());
-      // OR Get.offAllNamed('/login');
-
+      // Already have a session from a previous login - skip the
+      // Terms/GST/OTP flow entirely and go straight to the Dashboard. If the
+      // token has actually expired, the first authenticated call will 401
+      // and ApiBaseService's session-expired handler bounces back to GST.
+      final existingToken = await TokenManager.getToken();
+      if (existingToken != null && existingToken.isNotEmpty) {
+        masterData.loadInitialData();
+        final homeController = Get.find<HomeController>();
+        homeController.fetchBannerEvent();
+        homeController.fetchRateCard();
+        Get.offAll(() => DashboardScreen());
+      } else {
+        Get.offAll(() => TermsScreen());
+      }
     } catch (e, s) {
       debugPrint("❌ Splash init failed: $e");
       debugPrint("$s");
@@ -103,8 +117,9 @@ Future<void> _loadRemoteConfig() async {
 Future<void> _initServices() async {
   locator<NetworkService>().onInit();
 
-  final masterData = Get.find<MasterDataController>();
-  await masterData.loadInitialData();
+  // Master data (designations/states/company types) now requires an auth
+  // token, so it can't be loaded here - it's fetched right after OTP
+  // verification succeeds instead (see OtpController).
 }
 
 

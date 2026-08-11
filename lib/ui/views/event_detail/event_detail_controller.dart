@@ -42,7 +42,7 @@ class EventDetailController extends GetxController {
       final EventDetailResponse response =
           await ApiBaseService.request<EventDetailResponse>('Event/GetEventDetails?EventID=$eventId',  // $eventId
             method: RequestMethod.GET,
-            authenticated: false,
+            authenticated: true,
           );
 
       if (response.status == "200") {
@@ -74,7 +74,7 @@ class EventDetailController extends GetxController {
       final response = await ApiBaseService.request<RegisteredVisitorResponse>(
         'VisitorDetail/SelectVisitorToRegister?GSTN=$gstNumber&EventId=$eventId&StatusId=-1',
         method: RequestMethod.GET,
-        authenticated: false,
+        authenticated: true,
       );
 
       if (response.status == "200") {

@@ -94,7 +94,7 @@ class SelectVisitorController extends GetxController {
       final response = await ApiBaseService.request<Map<String, dynamic>>(
         'VisitorDetail/ValidateVisitor?VisitorId=$visitorId',
         method: RequestMethod.GET,
-        authenticated: false,
+        authenticated: true,
       );
       final status = response['status']?.toString();
       if (status == "200") {
@@ -121,7 +121,7 @@ class SelectVisitorController extends GetxController {
       final response = await ApiBaseService.request<RegisteredVisitorResponse>(
         'VisitorDetail/SelectVisitorToRegister?GSTN=$gstNumber&EventId=$eventId&StatusId=$dropdownStatusId',
         method: RequestMethod.GET,
-        authenticated: false,
+        authenticated: true,
       );
 
       if (response.status == "200") {
@@ -143,7 +143,7 @@ class SelectVisitorController extends GetxController {
       final response = await ApiBaseService.request<RegisteredVisitorResponse>(
         'VisitorDetail/SelectVisitorToRegister?GSTN=$gstNumber&EventId=$eventId&StatusId=$statusID',
         method: RequestMethod.GET,
-        authenticated: false,
+        authenticated: true,
       );
 
       if (response.status == "200") {

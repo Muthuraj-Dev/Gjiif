@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:tjw1/controllers/master_data_controller.dart';
 import 'package:tjw1/core/model/tjw/otp_verify.dart';
 import 'package:tjw1/services/api_base_service.dart';
 import 'package:tjw1/services/request_method.dart';
 import 'package:tjw1/services/secure_storage_service.dart';
+import 'package:tjw1/services/token_manager.dart';
 import 'package:tjw1/ui/views/dashboard/dashboard_screen.dart';
+import 'package:tjw1/ui/views/home/home_controller.dart';
 
 import '../organization/organizationDetail_screen.dart';
 
@@ -109,6 +112,22 @@ class OtpController extends GetxController with WidgetsBindingObserver {
       );
 
       print("OTP Verify Response: ${response.toJson()}");
+
+      // OTP verified successfully (any of 200/300/400) - save the issued
+      // JWT locally so subsequent API calls can send it automatically.
+      final token = response.jwt?.token;
+      if (token != null && token.isNotEmpty) {
+        await TokenManager.setToken(token);
+        await TokenManager.setTokenExpiry(response.jwt?.expiryDate ?? '');
+
+        // Now that a valid token is available, load the data that requires
+        // it. Not awaited so it runs in the background without delaying
+        // navigation - the screens that use this data already update
+        // reactively once it arrives.
+        Get.find<MasterDataController>().loadInitialData();
+        Get.find<HomeController>().fetchBannerEvent();
+        Get.find<HomeController>().fetchRateCard();
+      }
 
       // 100 error - 200 dashboard - 300 - fetch company details - 400 - no fetch just navigate company detail
 

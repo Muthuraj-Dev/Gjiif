@@ -260,7 +260,7 @@ class OrganizationDetailController extends GetxController {
       response = await ApiBaseService.request<FetchCompanyDetail>(
         'CompanyDetails/GetCompanyDetail?GSTN=$gstNumber&VisitorID=$visitorId',
         method: RequestMethod.GET,
-        authenticated: false,
+        authenticated: true,
       );
 
       if (response.status == "200") {

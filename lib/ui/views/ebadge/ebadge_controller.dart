@@ -102,7 +102,7 @@ class EbadgeController extends GetxController {
         'VisitorDetail/GetAllRegisteredVisitorsList'
         '?GSTNumber=$gstNumber&EventID=$selectedEventId',
         method: RequestMethod.GET,
-        authenticated: false,
+        authenticated: true,
       );
 
       if (response.status == "200") {
@@ -143,7 +143,7 @@ class EbadgeController extends GetxController {
       final response = await ApiBaseService.request<DropdownApi>(
         'Event/GetUpcomingEventsList',
         method: RequestMethod.GET,
-        authenticated: false,
+        authenticated: true,
       );
 
       if (response.status == "200" &&
