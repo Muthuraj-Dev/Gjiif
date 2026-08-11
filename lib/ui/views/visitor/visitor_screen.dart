@@ -95,7 +95,7 @@ class VisitorListScreen extends StatelessWidget {
                     );
 
                     if (result == 'refresh') {
-                      controller.fetchVisitorList();
+                      controller.fetchVisitorList(forceRefresh: true);
                     }
                   },
                   fillColor: AppColor.secondary,
@@ -328,7 +328,7 @@ class _VisitorListItemState extends State<VisitorListItem>
                               },
                             );
                             if (result == 'refresh') {
-                              widget.controller.fetchVisitorList();
+                              widget.controller.fetchVisitorList(forceRefresh: true);
                             }
                           },
                           child: Text(
