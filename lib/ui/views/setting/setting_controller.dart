@@ -6,6 +6,7 @@ import 'package:tjw1/ui/views/gst/gst_screen.dart';
 import '../../../services/api_base_service.dart';
 import '../../../services/request_method.dart';
 import '../../../services/secure_storage_service.dart';
+import '../../../services/token_manager.dart';
 
 class SettingController extends GetxController {
   final String termsContent = '''
@@ -138,7 +139,10 @@ REFUND & CANCELLATION POLICY
     try {
       isLoading(true);
 
-      // Clear locally stored session data
+      // Clear locally stored session data, including the auth token -
+      // otherwise it keeps getting attached to requests made after logout.
+      await TokenManager.deleteToken();
+      await TokenManager.deleteTokenExpiry();
       await SecureStorageService().delete("gst");
       await SecureStorageService().delete("mobileNumber");
       await SecureStorageService().delete("visitorID");
@@ -171,8 +175,13 @@ REFUND & CANCELLATION POLICY
           msg: response['message'] ?? 'Account deleted successfully',
         );
 
-        // Optional: Clear stored data
+        // Clear stored data, including the auth token - otherwise it keeps
+        // getting attached to requests made after the account is deleted.
+        await TokenManager.deleteToken();
+        await TokenManager.deleteTokenExpiry();
         await SecureStorageService().delete("gst");
+        await SecureStorageService().delete("mobileNumber");
+        await SecureStorageService().delete("visitorID");
 
         // Navigate to login/splash screen
         Get.offAll(() => GstScreen());
