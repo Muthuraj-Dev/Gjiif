@@ -22,7 +22,6 @@ class PaymentController extends GetxController {
 
   String? _eventId; // <-- Add this
 
-
   /// Change this based on build flavor
   // static const CFEnvironment _environment = CFEnvironment.SANDBOX;
 
@@ -62,7 +61,11 @@ class PaymentController extends GetxController {
   }
 
   /// Start payment
-  void startPayment({required String orderId, required String orderToken, required String eventId,}) {
+  void startPayment({
+    required String orderId,
+    required String orderToken,
+    required String eventId,
+  }) {
     if (_isPaymentInProgress) {
       debugPrint('⚠️ Payment already in progress');
       return;
@@ -121,13 +124,9 @@ class PaymentController extends GetxController {
     }
 
     try {
-      final response = await confirmOrder(
-        orderId: orderId,
-        eventId: _eventId!,
-      );
+      final response = await confirmOrder(orderId: orderId, eventId: _eventId!);
 
-      final status =
-      (response['orderStatus'] ?? '').toString().toUpperCase();
+      final status = (response['orderStatus'] ?? '').toString().toUpperCase();
 
       if (status == 'SUCCESS') {
         paymentStatus.value = 'SUCCESS';
@@ -142,15 +141,9 @@ class PaymentController extends GetxController {
         //
         // dashboardController.onItemTapped(2); // Registered tab
 
-        Get.offAllNamed(
-          '/dashboard',
-          arguments: {
-            'selectedIndex': 2,
-          },
-        );
+        Get.offAllNamed('/dashboard', arguments: {'selectedIndex': 2});
 
         // Get.offAllNamed('/dashboard');
-
       } else {
         paymentStatus.value = 'FAILED';
 

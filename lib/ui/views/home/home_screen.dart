@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // Reload the data actually shown on this screen (banners, upcoming
     // events, today's rate card) - previously this only refreshed Firebase
     // Remote Config, which doesn't drive any of that.
-    await controller.fetchBannerEvent();
+    await controller.fetchBannerEvent(forceRefresh: true);
     await controller.fetchRateCard();
 
     bool refreshed = await controller.refreshRemoteConfig();
@@ -215,18 +215,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       decoration: BoxDecoration(
                                                         color: AppColor.primary
                                                             .withOpacity(0.3),
-                                                        borderRadius: BorderRadius.circular(20)
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              20,
+                                                            ),
                                                       ),
                                                       child: Padding(
-                                                        padding: const EdgeInsets.symmetric(vertical: 2,horizontal: 6),
+                                                        padding:
+                                                            const EdgeInsets.symmetric(
+                                                              vertical: 2,
+                                                              horizontal: 6,
+                                                            ),
                                                         child: Text(
                                                           event.editionNumber ??
                                                               '',
-                                                          style: const TextStyle(
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                          ),
+                                                          style:
+                                                              const TextStyle(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
                                                         ),
                                                       ),
                                                     ),
@@ -244,7 +253,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.w500,
-                                                        color: Color(0xff5C5C5C),
+                                                        color: Color(
+                                                          0xff5C5C5C,
+                                                        ),
                                                       ),
                                                     ),
                                                     const SizedBox(height: 4),
@@ -297,7 +308,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                               //     },
                                               //   ),
                                               // ),
-
                                               Expanded(
                                                 child: CommonButton.outline(
                                                   prefixIcon: Icon(
@@ -306,10 +316,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   ),
                                                   text: "Stall Enquiry",
                                                   onPressed: () {
-                                                    if (event.stallUrl == null || event.stallUrl!.isEmpty) return;
+                                                    if (event.stallUrl ==
+                                                            null ||
+                                                        event.stallUrl!.isEmpty)
+                                                      return;
 
                                                     Get.to(
-                                                          () => CommonWebViewScreen(
+                                                      () => CommonWebViewScreen(
                                                         title: "Stall Enquiry",
                                                         url: event.stallUrl!,
                                                       ),

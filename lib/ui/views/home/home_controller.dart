@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -29,7 +30,7 @@ class HomeController extends GetxController {
   // DashboardScreen's Get.find()) - it's kicked off from OtpController
   // right after OTP verification succeeds instead.
 
-  Future<void> fetchBannerEvent() async {
+  Future<void> fetchBannerEvent({bool forceRefresh = false}) async {
     try {
       isLoading(true);
       BannerEventResponse response =
@@ -40,12 +41,24 @@ class HomeController extends GetxController {
           );
 
       if (response.status == "200") {
-        bannerImages.assignAll(
-          response.bannerEventData?.bannerList
-                  ?.map((e) => e.bannerURL ?? '')
-                  .toList() ??
-              [],
-        );
+        final newBannerUrls =
+            response.bannerEventData?.bannerList
+                    ?.map((e) => e.bannerURL ?? '')
+                    .toList() ??
+                [];
+
+        if (forceRefresh) {
+          // Banner URLs are stable even when the backend swaps the image
+          // behind them, so CachedNetworkImage would otherwise keep
+          // serving the stale bytes it already has for that URL.
+          final urlsToEvict = {...bannerImages, ...newBannerUrls}
+            ..removeWhere((url) => url.isEmpty);
+          for (final url in urlsToEvict) {
+            await CachedNetworkImage.evictFromCache(url);
+          }
+        }
+
+        bannerImages.assignAll(newBannerUrls);
         eventList.value = response.bannerEventData?.eventsList ?? [];
       }
     } catch (e) {
