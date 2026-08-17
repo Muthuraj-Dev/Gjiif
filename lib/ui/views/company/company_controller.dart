@@ -12,6 +12,7 @@ import 'package:tjw1/helper/utils/upload_utils.dart';
 import 'package:tjw1/services/api_base_service.dart';
 import 'package:tjw1/services/request_method.dart';
 import 'package:tjw1/services/secure_storage_service.dart';
+import 'package:tjw1/services/token_manager.dart';
 
 class CompanyController extends GetxController {
   final TextEditingController companyGstController = TextEditingController();
@@ -193,7 +194,6 @@ class CompanyController extends GetxController {
         // 0 means- no chnage,    1 - update /new    gst new upload - 1, gst repload - 1 , gst no upload just save - 0
       };
 
-      print("cdddddd $bodyData");
       final Map<String, dynamic> response =
           await ApiBaseService.request<Map<String, dynamic>>(
             'CompanyDetails/Save',
@@ -204,6 +204,16 @@ class CompanyController extends GetxController {
 
       if (response['status'] == "200") {
         Fluttertoast.showToast(msg: response['message'] ?? "");
+
+        // Save the JWT issued on successful company save, same as OTP
+        // verify - new registrants only receive a token at this step.
+        final jwt = response['jwt'];
+        final token = jwt?['token'];
+        if (token != null && token.toString().isNotEmpty) {
+          print("TOKEN SAVED");
+          await TokenManager.setToken(token);
+          await TokenManager.setTokenExpiry(jwt?['expiryDate'] ?? '');
+        }
       }
 
       //

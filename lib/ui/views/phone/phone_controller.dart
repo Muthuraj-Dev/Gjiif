@@ -46,6 +46,17 @@ class PhoneController extends GetxController {
 
           isAlreadyRegister = true;
           return;
+        } else if (verifyResponse['status'] == "200") {
+          final data = verifyResponse['data'];
+          if (data != null) {
+            final otpData = {
+              "otpID": data['otpID'],
+              "mobileNumber": data['mobileNumber'],
+              "visitorID": data['visitorID'],
+              "sentOTP": data['sentOTP'],
+            };
+            Get.to(() => OtpScreen(), arguments: otpData);
+          }
         } else {
           final Map<String, dynamic> json =
               await ApiBaseService.request<Map<String, dynamic>>(
@@ -53,13 +64,14 @@ class PhoneController extends GetxController {
                 method: RequestMethod.GET,
                 authenticated: false,
               );
-          if (json.isNotEmpty) {
-            // await SecureStorageService().write("visitorID", json['visitorID'].toString());
+          final data = json['data'];
+          if (data != null) {
+            // await SecureStorageService().write("visitorID", data['visitorID'].toString());
             final otpData = {
-              "otpID": json['otpID'],
-              "mobileNumber": json['mobileNumber'],
-              "visitorID": json['visitorID'],
-              "sentOTP": json['sentOTP'],
+              "otpID": data['otpID'],
+              "mobileNumber": data['mobileNumber'],
+              "visitorID": data['visitorID'],
+              "sentOTP": data['sentOTP'],
             };
             Get.to(() => OtpScreen(), arguments: otpData);
           }

@@ -120,14 +120,17 @@ class OtpController extends GetxController with WidgetsBindingObserver {
         await TokenManager.setToken(token);
         await TokenManager.setTokenExpiry(response.jwt?.expiryDate ?? '');
 
-        // Now that a valid token is available, load the data that requires
-        // it. Not awaited so it runs in the background without delaying
+        // Not awaited so it runs in the background without delaying
         // navigation - the screens that use this data already update
         // reactively once it arrives.
-        Get.find<MasterDataController>().loadInitialData();
         Get.find<HomeController>().fetchBannerEvent();
         Get.find<HomeController>().fetchRateCard();
       }
+
+      // New/unregistered visitors get no JWT here (status 300/400), but the
+      // Company Detail screen they're routed to next still needs company
+      // type / state lookups, so load master data regardless of token.
+      Get.find<MasterDataController>().loadInitialData();
 
       // 100 error - 200 dashboard - 300 - fetch company details - 400 - no fetch just navigate company detail
 
@@ -178,12 +181,13 @@ class OtpController extends GetxController with WidgetsBindingObserver {
         method: RequestMethod.GET,
         authenticated: false,
       );
-      otpID = response['otpID'].toString();
-      visitorID = response['visitorID'].toString();
-      mobileNumber = response['mobileNumber'].toString();
+      final data = response['data'];
+      otpID = data['otpID'].toString();
+      visitorID = data['visitorID'].toString();
+      mobileNumber = data['mobileNumber'].toString();
 
       // Testing Purpose Start
-      sentOtp = response['sentOTP'].toString();
+      sentOtp = data['sentOTP'].toString();
 
       if (gstNumber == "22AAAAA0000A1Z3") {
         otpController.text = sentOtp;

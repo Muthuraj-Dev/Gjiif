@@ -39,14 +39,10 @@ class MasterDataController extends GetxController {
       FetchCompanyType response = await ApiBaseService.request<FetchCompanyType>(
         'CompanyDetails/GetCompanyType',
         method: RequestMethod.GET,
-        authenticated: true,
+        authenticated: false,
       );
 
-      if (response.status == "200" && response.companyTypeData != null) {
-        return response.companyTypeData!;
-      } else {
-        return [];
-      }
+      return response.companyTypeData ?? [];
     } catch (e) {
       print('Error fetching company types: $e');
       return [];
@@ -59,14 +55,10 @@ class MasterDataController extends GetxController {
       StateList response = await ApiBaseService.request<StateList>(
         'SQ/GetStateList',
         method: RequestMethod.GET,
-        authenticated: true,
+        authenticated: false,
       );
 
-      if (response.response?.status == "200" && response.stateData != null) {
-        return response.stateData!;
-      } else {
-        return [];
-      }
+      return response.stateData ?? [];
     } catch (e) {
       print('Error fetching state list: $e');
       return [];

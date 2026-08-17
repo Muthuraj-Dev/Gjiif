@@ -13,8 +13,10 @@ import 'package:tjw1/helper/utils/upload_utils.dart';
 import 'package:tjw1/services/api_base_service.dart';
 import 'package:tjw1/services/request_method.dart';
 import 'package:tjw1/services/secure_storage_service.dart';
+import 'package:tjw1/services/token_manager.dart';
 
 import '../dashboard/dashboard_screen.dart';
+import '../home/home_controller.dart';
 
 class OrganizationDetailController extends GetxController {
   final dynamic statusCode = Get.arguments;
@@ -217,6 +219,23 @@ class OrganizationDetailController extends GetxController {
           "visitorID",
           response['visitorID'].toString(),
         );
+
+        // Save the JWT issued on successful company save, same as OTP
+        // verify - new registrants only receive a token at this step.
+        final jwt = response['jwt'];
+        final token = jwt?['token'];
+        if (token != null && token.toString().isNotEmpty) {
+          await TokenManager.setToken(token);
+          await TokenManager.setTokenExpiry(jwt?['expiryDate'] ?? '');
+
+          // This is the first point a new registrant has a token, so the
+          // Dashboard-bound data that needs auth (never fetched during
+          // OTP verify, since no token existed then) has to be kicked off
+          // here - otherwise Dashboard opens empty until a manual refresh.
+          Get.find<HomeController>().fetchBannerEvent();
+          Get.find<HomeController>().fetchRateCard();
+        }
+
         CommonDialog.showConfirmDialog(
           title: "Organization Saved",
           content: "The organization details have been saved successfully.",
