@@ -262,7 +262,7 @@ class _VisitorListItemState extends State<VisitorListItem>
                     //     widget.visitor.visitorPhotoURL ??
                     //     "https://via.placeholder.com/100",
                     imageUrl:
-                        "${widget.visitor.visitorPhotoURL!}?ts=${DateTime.now().millisecondsSinceEpoch}",
+                        "${widget.visitor.visitorPhotoURL!}${widget.visitor.visitorPhotoURL!.contains('?') ? '&' : '?'}ts=${DateTime.now().millisecondsSinceEpoch}",
                     // fallback image
                     fit: BoxFit.cover,
                     // placeholder:

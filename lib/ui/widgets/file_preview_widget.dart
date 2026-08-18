@@ -98,7 +98,7 @@ class FilePreviewWidget extends StatelessWidget {
           // Add timestamp only if it's an image URL
           final cacheBypassPath =
               !isPdf && isNetwork
-                  ? "$path?ts=${DateTime.now().millisecondsSinceEpoch}"
+                  ? "$path${path.contains('?') ? '&' : '?'}ts=${DateTime.now().millisecondsSinceEpoch}"
                   : path;
 
           return InkWell(
@@ -122,7 +122,8 @@ class FilePreviewWidget extends StatelessWidget {
                             ? isNetwork
                                 ? SfPdfViewer.network(path)
                                 : SfPdfViewer.file(File(path))
-                            : CachedNetworkImage(
+                            : isNetwork
+                            ? CachedNetworkImage(
                               imageUrl: cacheBypassPath,
                               fit: BoxFit.contain,
                               placeholder:
@@ -132,7 +133,8 @@ class FilePreviewWidget extends StatelessWidget {
                               errorWidget:
                                   (context, url, error) =>
                                       const Text('Failed to load image'),
-                            ),
+                            )
+                            : Image.file(File(path), fit: BoxFit.contain),
                   ),
                 ),
               );

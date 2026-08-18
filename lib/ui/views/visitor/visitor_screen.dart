@@ -272,7 +272,7 @@ class _VisitorListItemState extends State<VisitorListItem>
                 height: 100,
                 width: 100,
                 imageUrl:
-                    "${widget.data.visitorPhoto!}?ts=${DateTime.now().millisecondsSinceEpoch}",
+                    "${widget.data.visitorPhoto!}${widget.data.visitorPhoto!.contains('?') ? '&' : '?'}ts=${DateTime.now().millisecondsSinceEpoch}",
                 fit: BoxFit.cover,
                 placeholder:
                     (context, url) => Container(
